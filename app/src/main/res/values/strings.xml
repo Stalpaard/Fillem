@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FillemApp</string>
+    <string name="actionBarGenres">Genres</string>
 </resources>

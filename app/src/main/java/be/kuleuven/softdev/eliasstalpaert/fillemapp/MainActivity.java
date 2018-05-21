@@ -2,7 +2,6 @@ package be.kuleuven.softdev.eliasstalpaert.fillemapp;
 
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
-import android.support.v4.util.ArrayMap;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -14,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,8 +30,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -49,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView_rating;
     private TextView textView_beginyear;
     private TextView textView_endyear;
+    private TextView textView_minVotes;
 
     private Map<String,MenuItem> genres;
 
@@ -62,10 +61,12 @@ public class MainActivity extends AppCompatActivity {
     private String current_movie_id;
     private String jsonString;
 
-    private RangeBar rangeBar;
+    private RangeBar rangeBarYear;
+    private SeekBar seekbarVotes;
 
     private Integer beginyear;
     private Integer endyear;
+    private Integer minVotes;
     private Float rating_float;
 
     @Override
@@ -79,18 +80,23 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
         mMenu = mNavigationView.getMenu();
-        ratingBar = findViewById(R.id.ratingBar);
+
         textView_movie = findViewById(R.id.textView_movie);
         textView_rating = findViewById(R.id.textView_rating);
         textView_beginyear = findViewById(R.id.textView_beginyear);
         textView_endyear = findViewById(R.id.textView_endyear);
+        textView_minVotes = findViewById(R.id.textView_minVotes);
+
         button_movie = findViewById(R.id.button_movie);
-        rangeBar = findViewById(R.id.rangebar);
+
+        rangeBarYear = findViewById(R.id.rangebarYear);
+        seekbarVotes = findViewById(R.id.seekbarVotes);
+        ratingBar = findViewById(R.id.ratingBar);
         //init routine
         init();
 
-//        textView_beginyear.setText(rangeBar.getLeftIndex() + 1894);
-//        textView_endyear.setText(rangeBar.getRightIndex() + 1894);
+//        textView_beginyear.setText(rangeBarYear.getLeftIndex() + 1894);
+//        textView_endyear.setText(rangeBarYear.getRightIndex() + 1894);
         //Set on click listeners
         button_movie.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 textView_rating.setText(rating_float.toString().trim());
             }
         });
-        rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+        rangeBarYear.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
             @Override
             public void onIndexChangeListener(RangeBar rangeBar, int i, int i1) {
                 beginyear = i+1894;
@@ -122,6 +128,24 @@ public class MainActivity extends AppCompatActivity {
                 String s2 = endyear.toString();
                 textView_beginyear.setText(s1);
                 textView_endyear.setText(s2);
+            }
+        });
+
+        seekbarVotes.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                minVotes = calcVotesFromProgress(progress);
+                textView_minVotes.setText(minVotes.toString());
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
 
@@ -151,15 +175,18 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        rangeBar.setTickCount(127);
-        rangeBar.setThumbRadius(10);
+        rangeBarYear.setTickCount(127);
+        rangeBarYear.setThumbRadius(10);
+        seekbarVotes.setProgress(50);
 
         beginyear = 1894;
         endyear = 2018;
+        minVotes = calcVotesFromProgress(50);
 
         textView_beginyear.setText(beginyear.toString());
         textView_endyear.setText(endyear.toString());
         textView_rating.setText("Rating");
+        textView_minVotes.setText(minVotes.toString());
 
         genres.put("action",getMenuItem(R.id.actionGenre));
         genres.put("adventure",getMenuItem(R.id.adventureGenre));
@@ -186,6 +213,10 @@ public class MainActivity extends AppCompatActivity {
         genres.put("thriller",getMenuItem(R.id.thrillerGenre));
         genres.put("war",getMenuItem(R.id.warGenre));
         genres.put("western",getMenuItem(R.id.westernGenre));
+    }
+
+    private int calcVotesFromProgress(int progress){
+        return (((progress - 0)*1953205)/100) + 5;
     }
 
     @Override
@@ -218,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONArray jsonArray) {
                         try {
                            movie = jsonArray.getJSONObject(0);
-                           current_movie_id = movie.getString("tconst");
+                           current_movie_id = movie.getString("imdbId");
                            checkResponse();
                            //startDisplayActivity();
                         }
@@ -274,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String buildUrl(){
-        String url = "http://api.a17-sd206.studev.groept.be/query_movies";
+        String url = "http://api.a17-sd206.studev.groept.be/query_movies_new";
         StringBuilder urlBuilder = new StringBuilder(url);
         int emptyCount = 0;
         for(String s : genres.keySet()){
@@ -288,6 +319,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         int ratingInt = rating_float.intValue();
+        urlBuilder.append("/" + 0);
+        urlBuilder.append("/" + minVotes);
         urlBuilder.append("/" + ratingInt);
         urlBuilder.append("/" + beginyear);
         urlBuilder.append("/" + endyear);
@@ -300,6 +333,8 @@ public class MainActivity extends AppCompatActivity {
             for(String s : genres.keySet()){
                 urlEmptyBuilder.append("/" + s);
             }
+            urlEmptyBuilder.append("/" + 0);
+            urlEmptyBuilder.append("/" + minVotes);
             urlEmptyBuilder.append("/" + ratingInt);
             urlEmptyBuilder.append("/" + beginyear);
             urlEmptyBuilder.append("/" + endyear);

@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="250dp"
             android:text="TextView"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +50,7 @@
             android:id="@+id/button_movie"
             android:layout_width="160dp"
             android:layout_height="74dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:text="Generate Movie"
@@ -59,19 +59,34 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.edmodo.rangebar.RangeBar xmlns:custom="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/rangebar"
+            android:id="@+id/rangebarYear"
             android:layout_width="309dp"
-            android:layout_height="99dp"
-            android:layout_marginBottom="80dp"
+            android:layout_height="95dp"
+            android:layout_marginBottom="200dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
             custom:barColor="@color/colorPrimaryDark"
             custom:layout_constraintBottom_toBottomOf="parent"
             custom:layout_constraintEnd_toEndOf="parent"
+            custom:layout_constraintHorizontal_bias="0.514"
             custom:layout_constraintStart_toStartOf="parent"
             custom:layout_constraintTop_toTopOf="parent"
-            custom:layout_constraintVertical_bias="0.506" />
+            custom:layout_constraintVertical_bias="0.617" />
+
+        <SeekBar xmlns:custom="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/seekbarVotes"
+            android:layout_width="309dp"
+            android:layout_height="102dp"
+            android:layout_marginBottom="120dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="150dp"
+            custom:layout_constraintBottom_toBottomOf="parent"
+            custom:layout_constraintEnd_toEndOf="parent"
+            custom:layout_constraintHorizontal_bias="0.514"
+            custom:layout_constraintStart_toStartOf="parent"
+            custom:layout_constraintTop_toTopOf="parent"
+            custom:layout_constraintVertical_bias="0.574" />
 
         <TextView
             android:id="@+id/textView_movie"
@@ -79,11 +94,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="112dp"
+            android:layout_marginTop="96dp"
             android:text="Choose Filters"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -91,10 +107,10 @@
             android:id="@+id/textView_beginyear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="200dp"
+            android:layout_marginBottom="130dp"
             android:layout_marginEnd="200dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="50dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -105,15 +121,61 @@
             android:id="@+id/textView_endyear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="200dp"
+            android:layout_marginBottom="130dp"
             android:layout_marginEnd="43dp"
             android:layout_marginStart="600dp"
+            android:layout_marginTop="50dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/rangebarYear"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_votes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Minimum Amount of Votes"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/seekbarVotes"
+            app:layout_constraintVertical_bias="0.01" />
+
+        <TextView
+            android:id="@+id/textView_releaseYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Release Year Range"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.323" />
+
+        <TextView
+            android:id="@+id/textView_minVotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/rangebar"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_votes"
+            app:layout_constraintVertical_bias="0.092" />
 
     </android.support.constraint.ConstraintLayout>
 
