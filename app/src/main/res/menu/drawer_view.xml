@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/actionGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Action" />
+    <item
+        android:id="@+id/adventureGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Adventure" />
+    <item
+        android:id="@+id/animationGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Animation" />
+    <item
+        android:id="@+id/biographyGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Biography" />
+    <item
+        android:id="@+id/comedyGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Comedy" />
+    <item
+        android:id="@+id/crimeGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Crime" />
+    <item
+        android:id="@+id/documentaryGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Documentary" />
+    <item
+        android:id="@+id/dramaGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Drama" />
+    <item
+        android:id="@+id/familyGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Family" />
+    <item
+        android:id="@+id/fantasyGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Fantasy" />
+    <item
+        android:id="@+id/gameshowGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Gameshow" />
+    <item
+        android:id="@+id/historyGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="History" />
+    <item
+        android:id="@+id/horrorGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Horror" />
+    <item
+        android:id="@+id/musicGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Music" />
+    <item
+        android:id="@+id/musicalGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Musical" />
+    <item
+        android:id="@+id/mysteryGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Mystery" />
+    <item
+        android:id="@+id/newsGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="News" />
+    <item
+        android:id="@+id/realityGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Reality" />
+    <item
+        android:id="@+id/romanceGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Romance" />
+    <item
+        android:id="@+id/scifiGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Sci-Fi" />
+    <item
+        android:id="@+id/sportGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Sport" />
+    <item
+        android:id="@+id/talkshowGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Talkshow" />
+    <item
+        android:id="@+id/thrillerGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Thriller" />
+    <item
+        android:id="@+id/warGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="War" />
+    <item
+        android:id="@+id/westernGenre"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Western" />
+</menu>
