@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         seekbarVotes = findViewById(R.id.seekbarVotes);
         ratingBar = findViewById(R.id.ratingBar);
         //init routine
+        this.setTitle("Genres");
         init();
 
 //        textView_beginyear.setText(rangeBarYear.getLeftIndex() + 1894);
@@ -121,8 +122,14 @@ public class MainActivity extends AppCompatActivity {
                 if(beginyear < 1894){
                     beginyear = 1894;
                 }
+                if(beginyear > 2018){
+                    beginyear = 2018;
+                }
                 if(endyear > 2018){
                     endyear = 2018;
+                }
+                if(endyear < 1894){
+                    endyear = 1894;
                 }
                 String s1 = beginyear.toString();
                 String s2 = endyear.toString();
