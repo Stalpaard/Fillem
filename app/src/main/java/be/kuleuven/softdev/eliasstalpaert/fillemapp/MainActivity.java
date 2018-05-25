@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String EXTRA_JSONSTRING = "be.kuleuven.softdev.eliasstalpaert.fillemapp.JSONSTRING";
+    //public static final String EXTRA_JSONSTRING = "be.kuleuven.softdev.eliasstalpaert.fillemapp.JSONSTRING";
 
     private RatingBar ratingBar;
     private ActionBar actionBar;
@@ -52,17 +52,18 @@ public class MainActivity extends AppCompatActivity {
     private Map<String,MenuItem> genres;
 
     private Button button_movie;
-    private RequestQueue requestQueue;
+    //private RequestQueue requestQueue;
 
-    private Toast fetchMovie;
+    //private Toast fetchMovie;
 
-    private JSONObject movie;
+    //private JSONObject movie;
 
-    private String current_movie_id;
-    private String jsonString;
+    //private String current_movie_id;
+    //private String jsonString;
 
     private RangeBar rangeBarYear;
     private SeekBar seekbarVotes;
+    private MovieGenerator movieGenerator;
 
     private Integer beginyear;
     private Integer endyear;
@@ -75,11 +76,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //initialize variables
         rating_float = 0f;
-        genres = new TreeMap<>();
-        requestQueue = Volley.newRequestQueue(getApplicationContext());
+        //genres = new TreeMap<>();
+        //requestQueue = Volley.newRequestQueue(getApplicationContext());
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
         mMenu = mNavigationView.getMenu();
+        movieGenerator = new MovieGenerator(this, mMenu);
 
         textView_movie = findViewById(R.id.textView_movie);
         textView_rating = findViewById(R.id.textView_rating);
@@ -95,22 +97,21 @@ public class MainActivity extends AppCompatActivity {
         //init routine
         this.setTitle("Genres");
         init();
-
-//        textView_beginyear.setText(rangeBarYear.getLeftIndex() + 1894);
-//        textView_endyear.setText(rangeBarYear.getRightIndex() + 1894);
         //Set on click listeners
         button_movie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                generateMovie();
-                fetchMovie = Toast.makeText(MainActivity.this, "Fetching movie...", Toast.LENGTH_LONG);
-                fetchMovie.show();
+                movieGenerator.generateMovie();
+                //generateMovie();
+                //fetchMovie = Toast.makeText(MainActivity.this, "Fetching movie...", Toast.LENGTH_LONG);
+                //fetchMovie.show();
             }
         });
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 rating_float = rating * 2;
+                movieGenerator.setRating_float(rating_float);
                 textView_rating.setText(rating_float.toString().trim());
             }
         });
@@ -131,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
                 if(endyear < 1894){
                     endyear = 1894;
                 }
+                movieGenerator.setBeginyear(beginyear);
+                movieGenerator.setEndyear(endyear);
                 String s1 = beginyear.toString();
                 String s2 = endyear.toString();
                 textView_beginyear.setText(s1);
@@ -142,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 minVotes = calcVotesFromProgress(progress);
+                movieGenerator.setMinVotes(minVotes);
                 textView_minVotes.setText(minVotes.toString());
             }
 
@@ -187,14 +191,19 @@ public class MainActivity extends AppCompatActivity {
         seekbarVotes.setProgress(50);
 
         beginyear = 1894;
+        movieGenerator.setBeginyear(beginyear);
         endyear = 2018;
+        movieGenerator.setEndyear(endyear);
         minVotes = calcVotesFromProgress(50);
+        movieGenerator.setMinVotes(endyear);
+
+        movieGenerator.setRating_float(ratingBar.getRating()*2);
 
         textView_beginyear.setText(beginyear.toString());
         textView_endyear.setText(endyear.toString());
         textView_rating.setText("Rating");
         textView_minVotes.setText(minVotes.toString());
-
+        /*
         genres.put("action",getMenuItem(R.id.actionGenre));
         genres.put("adventure",getMenuItem(R.id.adventureGenre));
         genres.put("animation",getMenuItem(R.id.animationGenre));
@@ -220,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         genres.put("thriller",getMenuItem(R.id.thrillerGenre));
         genres.put("war",getMenuItem(R.id.warGenre));
         genres.put("western",getMenuItem(R.id.westernGenre));
+        */
     }
 
     private int calcVotesFromProgress(int progress){
@@ -239,13 +249,14 @@ public class MainActivity extends AppCompatActivity {
     public MenuItem getMenuItem(int id){
         return mMenu.findItem(id);
     }
-
+    /*
     private void startDisplayActivity() {
         Intent intent = new Intent(this, DisplayMovieActivity.class);
-        intent.putExtra(EXTRA_JSONSTRING, jsonString);
+        intent.putExtra(EXTRA_JSONSTRING, movieGenerator.getJsonString()); //jsonstring aangepast
         startActivity(intent);
     }
-
+    */
+    /*
     public void generateMovie() {
         //mNavigationView.getMenu().getItem(R.id.actionGenre).isChecked();
         String queryUrl = buildUrl();
@@ -258,7 +269,6 @@ public class MainActivity extends AppCompatActivity {
                            movie = jsonArray.getJSONObject(0);
                            current_movie_id = movie.getString("imdbId");
                            checkResponse();
-                           //startDisplayActivity();
                         }
                         catch(JSONException e) {
                             fetchMovie.cancel();
@@ -349,4 +359,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return queryUrl;
     }
+    */
 }

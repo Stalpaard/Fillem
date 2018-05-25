@@ -110,7 +110,7 @@ public class DisplayMovieActivity extends AppCompatActivity {
 
     private void initMovie() {
         try {
-            JSONObject movieJson = new JSONObject(getIntent().getStringExtra(MainActivity.EXTRA_JSONSTRING));
+            JSONObject movieJson = new JSONObject(getIntent().getStringExtra(MovieGenerator.EXTRA_JSONSTRING));
             movie_title = movieJson.getString("Title");
             movie_year = movieJson.getString("Year");
             movie_runtime = movieJson.getString("Runtime");
