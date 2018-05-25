@@ -29,7 +29,7 @@ import org.xml.sax.ContentHandler;
 public class DisplayMovieActivity extends AppCompatActivity {
 
     private RequestQueue requestQueue;
-    private TextView yeaman;
+    private TextView title_textview, releaseyear_textview, plot_textview, genre_textview, director_textview, actor_textview;
     private Context context = this;
 
     private String movie_title;
@@ -50,7 +50,13 @@ public class DisplayMovieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_movie);
         //initialize variables
-        yeaman = findViewById(R.id.textView_yeaman);
+        title_textview = findViewById(R.id.textView_title);
+        releaseyear_textview = findViewById(R.id.textView_displayReleaseYear);
+        plot_textview = findViewById(R.id.textViewPlot);
+        genre_textview = findViewById(R.id.textViewGenre);
+        director_textview = findViewById(R.id.textViewDirector);
+        actor_textview = findViewById(R.id.textViewActor);
+
         imageView_internet = findViewById(R.id.imageView_internet);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         initMovie();
@@ -76,10 +82,12 @@ public class DisplayMovieActivity extends AppCompatActivity {
             movie_runtime = movieJson.getString("Runtime");
             movie_genre = movieJson.getString("Genre");
             movie_plot = movieJson.getString("Plot");
-            movie_language = movieJson.getString("Language");
-            movie_country = movieJson.getString("Country");
             posterUrl = movieJson.getString("Poster");
-            yeaman.setText(movie_title);
+
+            title_textview.setText(movie_title);
+            releaseyear_textview.setText(movie_year);
+            plot_textview.setText(movie_plot);
+            genre_textview.setText(movie_genre);
         } catch (JSONException e) {
             Toast.makeText(DisplayMovieActivity.this, "Exception occurred", Toast.LENGTH_SHORT).show();
         }
