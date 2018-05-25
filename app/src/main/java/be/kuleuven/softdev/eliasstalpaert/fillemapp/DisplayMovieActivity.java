@@ -3,12 +3,16 @@ package be.kuleuven.softdev.eliasstalpaert.fillemapp;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +35,8 @@ public class DisplayMovieActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private TextView title_textview, releaseyear_textview, plot_textview, genre_textview, director_textview, actor_textview;
     private Context context = this;
+    private ConstraintLayout constraintLayout;
+    private LinearLayout detailsLayout;
 
     private String movie_title;
     private String movie_year;
@@ -56,6 +62,8 @@ public class DisplayMovieActivity extends AppCompatActivity {
         genre_textview = findViewById(R.id.textViewGenre);
         director_textview = findViewById(R.id.textViewDirector);
         actor_textview = findViewById(R.id.textViewActor);
+        constraintLayout = findViewById(R.id.constraint);
+        detailsLayout = findViewById(R.id.detailsLayout);
 
         imageView_internet = findViewById(R.id.imageView_internet);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -71,7 +79,33 @@ public class DisplayMovieActivity extends AppCompatActivity {
                 .centerInside()
                 .placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher_round)
-                .into(imageView_internet);
+                .into(imageView_internet, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess(){
+                        BitmapDrawable d = (BitmapDrawable) imageView_internet.getDrawable();
+                        Bitmap b = d.getBitmap();
+                        setConstraintBackground(b);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        //Toast.makeText(DisplayMovieActivity.this, "Poster not found", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void setConstraintBackground(Bitmap b){
+            Palette.from(b).generate(new Palette.PaletteAsyncListener() {
+                public void onGenerated(Palette palette) {
+                    int textColor = palette.getDarkMutedColor(6723232);
+                    int backgroundConstraint = palette.getLightVibrantColor(6723232);
+                    int backgroundLinear = palette.getDarkVibrantColor(6723232);
+                    releaseyear_textview.setTextColor(textColor);
+                    title_textview.setTextColor(textColor);
+                    constraintLayout.setBackgroundColor(backgroundConstraint);
+                    detailsLayout.setBackgroundColor(backgroundLinear);
+                }
+            });
     }
 
     private void initMovie() {
