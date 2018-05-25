@@ -24,6 +24,10 @@ import java.util.TreeMap;
 public class MovieGenerator {
 
     public static final String EXTRA_JSONSTRING = "be.kuleuven.softdev.eliasstalpaert.fillemapp.JSONSTRING";
+    public static final String EXTRA_BEGINYEAR = "be.kuleuven.softdev.eliasstalpaert.fillemapp.BEGINYEAR";
+    public static final String EXTRA_ENDYEAR = "be.kuleuven.softdev.eliasstalpaert.fillemapp.ENDYEAR";
+    public static final String EXTRA_RATING = "be.kuleuven.softdev.eliasstalpaert.fillemapp.RATING";
+    public static final String EXTRA_MINVOTES = "be.kuleuven.softdev.eliasstalpaert.fillemapp.MINVOTES";
 
     private Context context;
     private JSONObject movie;
@@ -37,6 +41,12 @@ public class MovieGenerator {
     private Integer beginyear;
     private Integer endyear;
     private Integer minVotes;
+    private Integer generateTries;
+
+    public void generate(){
+        generateTries = 0;
+        generateMovie();
+    }
 
     public String getJsonString() {
         return jsonString;
@@ -64,43 +74,51 @@ public class MovieGenerator {
         this.context = context;
         this.menu = menu;
 
-        genres.put("action",menu.getItem(0));
-        genres.put("adventure",menu.getItem(1));
-        genres.put("animation",menu.getItem(2));
-        genres.put("biography",menu.getItem(3));
-        genres.put("comedy",menu.getItem(4));
-        genres.put("crime",menu.getItem(5));
-        genres.put("documentary",menu.getItem(6));
-        genres.put("drama",menu.getItem(7));
-        genres.put("family",menu.getItem(8));
-        genres.put("fantasy",menu.getItem(9));
-        genres.put("game-show",menu.getItem(10));
-        genres.put("history",menu.getItem(11));
-        genres.put("horror",menu.getItem(12));
-        genres.put("music",menu.getItem(13));
-        genres.put("musical",menu.getItem(14));
-        genres.put("mystery",menu.getItem(15));
-        genres.put("news",menu.getItem(16));
-        genres.put("reality-tv",menu.getItem(17));
-        genres.put("romance",menu.getItem(18));
-        genres.put("sci-fi",menu.getItem(19));
-        genres.put("sport",menu.getItem(20));
-        genres.put("talk-show",menu.getItem(21));
-        genres.put("thriller",menu.getItem(22));
-        genres.put("war",menu.getItem(23));
-        genres.put("western",menu.getItem(24));
+        genres.put("action",getMenuItem(R.id.actionGenre));
+        genres.put("adventure",getMenuItem(R.id.adventureGenre));
+        genres.put("animation",getMenuItem(R.id.animationGenre));
+        genres.put("biography",getMenuItem(R.id.biographyGenre));
+        genres.put("comedy",getMenuItem(R.id.comedyGenre));
+        genres.put("crime",getMenuItem(R.id.crimeGenre));
+        genres.put("documentary",getMenuItem(R.id.documentaryGenre));
+        genres.put("drama",getMenuItem(R.id.dramaGenre));
+        genres.put("family",getMenuItem(R.id.familyGenre));
+        genres.put("fantasy",getMenuItem(R.id.fantasyGenre));
+        genres.put("game-show",getMenuItem(R.id.gameshowGenre));
+        genres.put("history",getMenuItem(R.id.historyGenre));
+        genres.put("horror",getMenuItem(R.id.horrorGenre));
+        genres.put("music",getMenuItem(R.id.musicGenre));
+        genres.put("musical",getMenuItem(R.id.musicalGenre));
+        genres.put("mystery",getMenuItem(R.id.mysteryGenre));
+        genres.put("news",getMenuItem(R.id.newsGenre));
+        genres.put("reality-tv",getMenuItem(R.id.realityGenre));
+        genres.put("romance",getMenuItem(R.id.romanceGenre));
+        genres.put("sci-fi",getMenuItem(R.id.scifiGenre));
+        genres.put("sport",getMenuItem(R.id.sportGenre));
+        genres.put("talk-show",getMenuItem(R.id.talkshowGenre));
+        genres.put("thriller",getMenuItem(R.id.thrillerGenre));
+        genres.put("war",getMenuItem(R.id.warGenre));
+        genres.put("western",getMenuItem(R.id.westernGenre));
     }
 
     private void startDisplayActivity() {
         Intent intent = new Intent(context, DisplayMovieActivity.class);
         intent.putExtra(EXTRA_JSONSTRING, jsonString); //jsonstring aangepast
+        intent.putExtra(EXTRA_BEGINYEAR, beginyear);
+        intent.putExtra(EXTRA_ENDYEAR, endyear);
+        intent.putExtra(EXTRA_RATING, rating_float);
+        intent.putExtra(EXTRA_MINVOTES, minVotes);
         context.startActivity(intent);
     }
 
-    public void generateMovie() {
-        //mNavigationView.getMenu().getItem(R.id.actionGenre).isChecked();
-        fetchMovie = Toast.makeText(context, "Fetching movie...", Toast.LENGTH_LONG);
+    private MenuItem getMenuItem(int id){
+        return menu.findItem(id);
+    }
+
+    private void generateMovie() {
+        fetchMovie = Toast.makeText(context, "Fetching movie... "+generateTries.toString(), Toast.LENGTH_LONG);
         fetchMovie.show();
+        generateTries++;
 
         String queryUrl = buildUrl();
 
@@ -129,7 +147,7 @@ public class MovieGenerator {
         requestQueue.add(request);
     }
 
-    public void checkResponse() {
+    private void checkResponse() {
         String queryUrl = "http://www.omdbapi.com/?i=" + current_movie_id + "&apikey=e2383f7f";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, queryUrl, null, new Response.Listener<JSONObject>() {
@@ -155,9 +173,7 @@ public class MovieGenerator {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
                         generateMovie();
-                        //Toast.makeText(MainActivity.this, "noman", Toast.LENGTH_SHORT).show();
                     }
                 });
         requestQueue.add(jsonObjectRequest);

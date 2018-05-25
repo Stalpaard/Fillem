@@ -11,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,13 +46,17 @@ public class DisplayMovieActivity extends AppCompatActivity {
     private String movie_runtime;
     private String movie_genre;
     private String movie_plot;
-    private String movie_language;
-    private String movie_country;
     private String posterUrl;
 
+
+    private Integer beginyear, endyear, minVotes;
+    private Float rating_float;
+
     private Drawable poster;
+    private Button generateAgain;
     private ImageView imageView_internet;
     private Target target;
+    private MovieGenerator movieGenerator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +71,36 @@ public class DisplayMovieActivity extends AppCompatActivity {
         actor_textview = findViewById(R.id.textViewActor);
         constraintLayout = findViewById(R.id.constraint);
         detailsLayout = findViewById(R.id.detailsLayout);
+        generateAgain = findViewById(R.id.generateAgain);
+        movieGenerator = new MovieGenerator(context, MainActivity.mMenu);
+
+        beginyear = getIntent().getIntExtra(MovieGenerator.EXTRA_BEGINYEAR, 0);
+        endyear = getIntent().getIntExtra(MovieGenerator.EXTRA_ENDYEAR, 3000);
+        rating_float = getIntent().getFloatExtra(MovieGenerator.EXTRA_RATING, 0);
+        minVotes = getIntent().getIntExtra(MovieGenerator.EXTRA_MINVOTES, 0);
 
         imageView_internet = findViewById(R.id.imageView_internet);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         initMovie();
         loadImageByUrl(posterUrl);
 
+        //On Click Listeners
+        generateAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                movieGenerator.setRating_float(rating_float);
+                movieGenerator.setMinVotes(minVotes);
+                movieGenerator.setEndyear(endyear);
+                movieGenerator.setBeginyear(beginyear);
+                movieGenerator.generate();
+                finishActivity();
+            }
+        });
+
+    }
+
+    private void finishActivity(){
+        this.finish();
     }
 
     private void loadImageByUrl(String posterUrl) {

@@ -65,142 +65,160 @@
             app:layout_constraintVertical_bias="0.619" />
     </android.support.constraint.ConstraintLayout>
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="315dp"
-        android:layout_below="@id/constraint"
+        android:layout_below="@id/constraint">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="4dp">
-        <LinearLayout
-            android:id="@+id/detailsLayout"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp">
 
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/detailsLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp">
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textViewPlotTitle"
-                    android:layout_width="wrap_content"
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="Plot"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:textColor="#000000"
-                    android:textSize="17sp" />
+                    android:layout_margin="5dp">
 
-                <TextView
-                    android:id="@+id/textViewPlot"
-                    android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/textViewPlotTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Plot"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                            android:textColor="#000000"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/textViewPlot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/textViewPlotTitle"
+                            android:text="YEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMAN"
+                            android:textSize="15sp" />
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewPlotTitle"
-                    android:text="YEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMAN"
-                    android:textSize="15sp" />
+                    android:layout_margin="5dp">
 
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp">
 
-        </android.support.v7.widget.CardView>
+                        <TextView
+                            android:id="@+id/textViewGenreTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Genre"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                            android:textColor="#000000"
+                            android:textSize="17sp" />
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+                        <TextView
+                            android:id="@+id/textViewGenre"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/textViewGenreTitle"
+                            android:text="TextView"
+                            android:textSize="15sp" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp">
+                    </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/textViewGenreTitle"
-                    android:layout_width="wrap_content"
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="Genre"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:textColor="#000000"
-                    android:textSize="17sp" />
+                    android:layout_margin="5dp">
 
-                <TextView
-                    android:id="@+id/textViewGenre"
-                    android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/textViewDirectorTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Director(s)"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                            android:textColor="#000000"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/textViewDirector"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/textViewDirectorTitle"
+                            android:text="TextView"
+                            android:textSize="15sp" />
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewGenreTitle"
-                    android:text="TextView"
-                    android:textSize="15sp" />
+                    android:layout_margin="5dp">
 
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp">
 
-        </android.support.v7.widget.CardView>
+                        <TextView
+                            android:id="@+id/textViewActorTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Actor(s)"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                            android:textColor="#000000"
+                            android:textSize="17sp" />
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+                        <TextView
+                            android:id="@+id/textViewActor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/textViewActorTitle"
+                            android:text="TextView"
+                            android:textSize="15sp" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp">
-
-                <TextView
-                    android:id="@+id/textViewDirectorTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="Director(s)"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:textColor="#000000"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/textViewDirector"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewDirectorTitle"
-                    android:text="TextView"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp">
-
-                <TextView
-                    android:id="@+id/textViewActorTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="Actor(s)"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:textColor="#000000"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/textViewActor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewActorTitle"
-                    android:text="TextView"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-        </LinearLayout>
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
     </ScrollView>
+
+        <Button
+            android:id="@+id/generateAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="23dp"
+            android:layout_marginEnd="35dp"
+            android:text="Generate Again" />
+    </RelativeLayout>
 </RelativeLayout>
