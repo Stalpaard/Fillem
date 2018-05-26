@@ -1,5 +1,6 @@
 package be.kuleuven.softdev.eliasstalpaert.fillemapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -31,33 +32,27 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RatingBar ratingBar;
-    private ActionBar actionBar;
-
-    private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
+    public static List<String> history;
+    public static Context mContext;
     public static Menu mMenu;
 
-    private TextView textView_movie;
-    private TextView textView_rating;
-    private TextView textView_beginyear;
-    private TextView textView_endyear;
-    private TextView textView_minVotes;
-
-    private Button button_movie;
-
+    private RatingBar ratingBar;
+    private ActionBar actionBar;
+    private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
+    private TextView textView_movie, textView_rating, textView_beginyear, textView_endyear, textView_minVotes;
+    private Button button_movie, historyButton;
     private RangeBar rangeBarYear;
     private SeekBar seekbarVotes;
     private MovieGenerator movieGenerator;
-
-    private Integer beginyear;
-    private Integer endyear;
-    private Integer minVotes;
+    private Integer beginyear, endyear, minVotes;
     private Float rating_float;
 
     @Override
@@ -66,45 +61,36 @@ public class MainActivity extends AppCompatActivity {
         setInputEnabled(true);
     }
 
-    public void setInputEnabled(boolean state){
-        button_movie.setEnabled(state);
-        ratingBar.setEnabled(state);
-        rangeBarYear.setEnabled(state);
-        seekbarVotes.setEnabled(state);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //initialize variables
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        mNavigationView = findViewById(R.id.nav_view);
+        this.findViews();
+        history = new ArrayList<>();
         mMenu = mNavigationView.getMenu();
-        movieGenerator = new MovieGenerator(this, mMenu, this);
-
-        textView_movie = findViewById(R.id.textView_movie);
-        textView_rating = findViewById(R.id.textView_rating);
-        textView_beginyear = findViewById(R.id.textView_beginyear);
-        textView_endyear = findViewById(R.id.textView_endyear);
-        textView_minVotes = findViewById(R.id.textView_minVotes);
-
-        button_movie = findViewById(R.id.button_movie);
-
-        rangeBarYear = findViewById(R.id.rangebarYear);
-        seekbarVotes = findViewById(R.id.seekbarVotes);
-        ratingBar = findViewById(R.id.ratingBar);
-
-        //init routine
+        mContext = this;
+        movieGenerator = new MovieGenerator(mContext, mMenu, this);
         this.setTitle("Genres");
-        init();
+        initActionBar();
+        initFilters();
+        initMovieGen();
+        this.setOnClickListeners();
+    }
 
-        //Set on click listeners
+    private void setOnClickListeners(){
         button_movie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                movieGenerator.generate();
                 setInputEnabled(false);
+                movieGenerator.generate();
+            }
+        });
+
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startHistoryActivity();
             }
         });
 
@@ -172,31 +158,55 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void init() {
+    private void findViews(){
+        historyButton = findViewById(R.id.historyButton);
+        button_movie = findViewById(R.id.button_movie);
+        rangeBarYear = findViewById(R.id.rangebarYear);
+        seekbarVotes = findViewById(R.id.seekbarVotes);
+        ratingBar = findViewById(R.id.ratingBar);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mNavigationView = findViewById(R.id.nav_view);
+        textView_movie = findViewById(R.id.textView_movie);
+        textView_rating = findViewById(R.id.textView_rating);
+        textView_beginyear = findViewById(R.id.textView_beginyear);
+        textView_endyear = findViewById(R.id.textView_endyear);
+        textView_minVotes = findViewById(R.id.textView_minVotes);
+    }
+
+    private void initActionBar(){
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+    }
 
-        rangeBarYear.setTickCount(127);
-        rangeBarYear.setThumbRadius(10);
-        seekbarVotes.setProgress(50);
-
-        beginyear = 1894;
+    private void initMovieGen(){
         movieGenerator.setBeginyear(beginyear);
-        endyear = 2018;
         movieGenerator.setEndyear(endyear);
-        minVotes = calcVotesFromProgress(50);
         movieGenerator.setMinVotes(endyear);
-        rating_float = 0f;
         movieGenerator.setRating_float(rating_float);
+    }
 
+    private void initFilters(){
+        beginyear = 1894;
+        endyear = 2018;
+        minVotes = calcVotesFromProgress(50);
+        rating_float = 0f;
         textView_beginyear.setText(beginyear.toString());
         textView_endyear.setText(endyear.toString());
         textView_rating.setText("Rating");
         textView_minVotes.setText(minVotes.toString());
+        rangeBarYear.setTickCount(127);
+        rangeBarYear.setThumbRadius(10);
+        seekbarVotes.setProgress(50);
+    }
+
+    public void setInputEnabled(boolean state){
+        button_movie.setEnabled(state);
+        ratingBar.setEnabled(state);
+        rangeBarYear.setEnabled(state);
+        seekbarVotes.setEnabled(state);
     }
 
     private int calcVotesFromProgress(int progress){
@@ -212,4 +222,10 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void startHistoryActivity(){
+        Intent intent = new Intent(this, HistoryScreen.class);
+        this.startActivity(intent);
+    }
+
 }

@@ -31,47 +31,54 @@ public class MovieGenerator {
 
     private Context context;
     private JSONObject movie;
-    private String current_movie_id;
-    private String jsonString;
+    private String current_movie_id, jsonString;
     private Toast fetchMovie;
     private RequestQueue requestQueue;
     private Map<String,MenuItem> genres;
     private Menu menu;
     private Float rating_float;
-    private Integer beginyear;
-    private Integer endyear;
-    private Integer minVotes;
-    private Integer generateTries;
+    private Integer beginyear, endyear, minVotes, limitOfTries, generateTries;
     private MainActivity mainActivity;
 
-    public void generate(){
-        generateTries = 1;
-        generateMovie();
-    }
-
-    public void setRating_float(Float rating_float) {
-        this.rating_float = rating_float*10;
-    }
-
-    public void setBeginyear(Integer beginyear) {
-        this.beginyear = beginyear;
-    }
-
-    public void setEndyear(Integer endyear) {
-        this.endyear = endyear;
-    }
-
-    public void setMinVotes(Integer minVotes) {
-        this.minVotes = minVotes;
-    }
 
     public MovieGenerator(Context context, Menu menu, MainActivity mainActivity) {
-        genres = new TreeMap<>();
-        requestQueue = Volley.newRequestQueue(context);
         this.context = context;
         this.menu = menu;
         this.mainActivity = mainActivity;
 
+        generateTries = 1;
+        genres = new TreeMap<>();
+        requestQueue = Volley.newRequestQueue(context);
+
+        initGenres();
+    }
+
+    public void generate(){
+        calculateLimit();
+    }
+
+    public void setRating_float(Float rating_float) {
+        this.rating_float = rating_float*10;
+        generateTries = 1;
+    }
+
+    public void setBeginyear(Integer beginyear) {
+        this.beginyear = beginyear;
+        generateTries = 1;
+    }
+
+    public void setEndyear(Integer endyear) {
+        this.endyear = endyear;
+        generateTries = 1;
+    }
+
+    public void setMinVotes(Integer minVotes) {
+        this.minVotes = minVotes;
+        generateTries = 1;
+    }
+
+
+    private void initGenres(){
         genres.put("action",getMenuItem(R.id.actionGenre));
         genres.put("adventure",getMenuItem(R.id.adventureGenre));
         genres.put("animation",getMenuItem(R.id.animationGenre));
@@ -113,38 +120,70 @@ public class MovieGenerator {
         return menu.findItem(id);
     }
 
-    private void generateMovie() {
-        fetchMovie = Toast.makeText(context, "Fetching movie... try " + generateTries.toString(), Toast.LENGTH_LONG);
-        fetchMovie.show();
-        generateTries++;
-
-        String queryUrl = buildUrl();
-
+    private void calculateLimit(){
+        String queryUrl = buildUrl("http://api.a17-sd206.studev.groept.be/get_size_of_results");
         JsonArrayRequest request = new JsonArrayRequest(queryUrl,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
                         try {
-                            movie = jsonArray.getJSONObject(0);
-                            current_movie_id = movie.getString("imdbId");
-                            checkResponse();
+                            JSONObject countArray = jsonArray.getJSONObject(0);
+                            String countString = countArray.getString("count");
+                            limitOfTries = Integer.parseInt(countString);
+                            generateMovie();
                         }
                         catch(JSONException e) {
-                            fetchMovie.cancel();
-                            Toast.makeText(context, "No movies found", Toast.LENGTH_SHORT).show();
-                            reEnableInput();
+                            Toast.makeText(context, "Couldn't calculate limit of tries, try again or restart" + generateTries.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        fetchMovie.cancel();
                         Toast.makeText(context, "Unable to fetch data: please check your internet connection", Toast.LENGTH_SHORT).show();
-                        reEnableInput();
                     }
                 });
         requestQueue.add(request);
+    }
+
+    private void generateMovie() {
+        fetchMovie = Toast.makeText(context, "Fetching movie... try " + generateTries.toString(), Toast.LENGTH_SHORT);
+        //fetchMovie.show();
+        generateTries++;
+
+        if(generateTries > limitOfTries){
+            Toast.makeText(context, "All possible results have been found, change filters (all results are in history)", Toast.LENGTH_SHORT).show();
+            reEnableInput();
+        }
+        else{
+            String queryUrl = buildUrl("http://api.a17-sd206.studev.groept.be/final_query");
+
+            JsonArrayRequest request = new JsonArrayRequest(queryUrl,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray jsonArray) {
+                            try {
+                                movie = jsonArray.getJSONObject(0);
+                                current_movie_id = movie.getString("imdbId");
+                                checkResponse();
+                            }
+                            catch(JSONException e) {
+                                fetchMovie.cancel();
+                                Toast.makeText(context, "No movies found", Toast.LENGTH_SHORT).show();
+                                reEnableInput();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            fetchMovie.cancel();
+                            Toast.makeText(context, "Unable to fetch data: please check your internet connection", Toast.LENGTH_SHORT).show();
+                            reEnableInput();
+                        }
+                    });
+            requestQueue.add(request);
+        }
     }
 
     private void reEnableInput(){
@@ -160,10 +199,11 @@ public class MovieGenerator {
                     public void onResponse(JSONObject responseObject) {
                         try {
                             String response = responseObject.getString("Response");
-                            if(response.equals("True")){
-                                jsonString = responseObject.toString(); // save JSONObject to String
-                                fetchMovie.cancel(); // cancel Toast "Fetching movie..."
-                                startDisplayActivity(); // goto displayactivity
+                            if(response.equals("True") && !(historyContainsId(current_movie_id))){
+                                MainActivity.history.add(current_movie_id);
+                                jsonString = responseObject.toString();
+                                fetchMovie.cancel();
+                                startDisplayActivity();
                             }
                             else{
                                 generateMovie();
@@ -183,8 +223,16 @@ public class MovieGenerator {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private String buildUrl(){
-        String url = "http://api.a17-sd206.studev.groept.be/final_query";
+    private boolean historyContainsId(String imdbId){
+        if(MainActivity.history.contains(imdbId)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    private String buildUrl(String url){
         StringBuilder urlBuilder = new StringBuilder(url);
         int emptyCount = 0;
         for(String s : genres.keySet()){
