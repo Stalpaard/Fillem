@@ -43,11 +43,13 @@
             android:layout_marginTop="8dp"
             android:text="title"
             android:textAlignment="center"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/runTime_textView"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/imageView_internet"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.789" />
 
         <ImageView
             android:id="@+id/imageView_internet"
@@ -63,6 +65,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.619" />
+
+        <TextView
+            android:id="@+id/runTime_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView_internet"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.865" />
     </android.support.constraint.ConstraintLayout>
 
     <RelativeLayout
@@ -76,6 +93,7 @@
 
             <LinearLayout
                 android:id="@+id/detailsLayout"
+                android:paddingBottom="68dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
@@ -107,7 +125,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/textViewPlotTitle"
-                            android:text="YEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMANYEAMAN"
+                            android:text="Lorem Ipsum enzovoort"
                             android:textSize="15sp" />
 
                     </RelativeLayout>
@@ -139,7 +157,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/textViewGenreTitle"
-                            android:text="TextView"
+                            android:text="Khei Epic"
                             android:textSize="15sp" />
 
                     </RelativeLayout>
@@ -171,7 +189,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/textViewDirectorTitle"
-                            android:text="TextView"
+                            android:text="Vincent VDW"
                             android:textSize="15sp" />
 
                     </RelativeLayout>
@@ -203,11 +221,43 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/textViewActorTitle"
-                            android:text="TextView"
+                            android:text="Kasper Rutten"
                             android:textSize="15sp" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/trailerCardview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/textViewTrailerTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Trailer"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                            android:textColor="#000000"
+                            android:textSize="17sp" />
+
+                        <Button
+                            android:id="@+id/trailerPlayButton"
+                            android:text="PLAY TRAILER"
+                            android:layout_below="@id/textViewTrailerTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
             </LinearLayout>
     </ScrollView>
 
@@ -217,7 +267,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="23dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginEnd="35dp"
             android:text="Generate Again" />
     </RelativeLayout>

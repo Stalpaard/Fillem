@@ -10,6 +10,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -36,7 +37,7 @@ import org.xml.sax.ContentHandler;
 public class DisplayMovieActivity extends AppCompatActivity {
 
     private RequestQueue requestQueue;
-    private TextView title_textview, releaseyear_textview, plot_textview, genre_textview, director_textview, actor_textview;
+    private TextView title_textview, releaseyear_textview, plot_textview, genre_textview, director_textview, actor_textview, runtime_textview;
     private Context context = this;
     private ConstraintLayout constraintLayout;
     private LinearLayout detailsLayout;
@@ -45,18 +46,21 @@ public class DisplayMovieActivity extends AppCompatActivity {
     private String movie_year;
     private String movie_runtime;
     private String movie_genre;
+    private String movie_director;
+    private String movie_actors;
     private String movie_plot;
+    private String imdbId;
     private String posterUrl;
 
 
     private Integer beginyear, endyear, minVotes;
     private Float rating_float;
 
-    private Drawable poster;
     private Button generateAgain;
     private ImageView imageView_internet;
-    private Target target;
-    private MovieGenerator movieGenerator;
+    private MovieGeneratorDisplay movieGenerator;
+    private TrailerGenerator trailerGenerator;
+    private Button trailerPlayButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +73,12 @@ public class DisplayMovieActivity extends AppCompatActivity {
         genre_textview = findViewById(R.id.textViewGenre);
         director_textview = findViewById(R.id.textViewDirector);
         actor_textview = findViewById(R.id.textViewActor);
+        runtime_textview = findViewById(R.id.runTime_textView);
         constraintLayout = findViewById(R.id.constraint);
         detailsLayout = findViewById(R.id.detailsLayout);
         generateAgain = findViewById(R.id.generateAgain);
-        movieGenerator = new MovieGenerator(context, MainActivity.mMenu);
+        movieGenerator = new MovieGeneratorDisplay(context, MainActivity.mMenu, this);
+        trailerPlayButton = findViewById(R.id.trailerPlayButton);
 
         beginyear = getIntent().getIntExtra(MovieGenerator.EXTRA_BEGINYEAR, 0);
         endyear = getIntent().getIntExtra(MovieGenerator.EXTRA_ENDYEAR, 3000);
@@ -82,24 +88,33 @@ public class DisplayMovieActivity extends AppCompatActivity {
         imageView_internet = findViewById(R.id.imageView_internet);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         initMovie();
+
         loadImageByUrl(posterUrl);
 
         //On Click Listeners
         generateAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                generateAgain.setEnabled(false);
                 movieGenerator.setRating_float(rating_float);
                 movieGenerator.setMinVotes(minVotes);
                 movieGenerator.setEndyear(endyear);
                 movieGenerator.setBeginyear(beginyear);
                 movieGenerator.generate();
-                finishActivity();
+            }
+        });
+
+        trailerPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String youtubeId = trailerGenerator.getYoutubeId();
+                trailerGenerator.watchYoutubeVideo(context, youtubeId);
             }
         });
 
     }
 
-    private void finishActivity(){
+    public void finishActivity(){
         this.finish();
     }
 
@@ -130,16 +145,16 @@ public class DisplayMovieActivity extends AppCompatActivity {
                 public void onGenerated(Palette palette) {
                     int textColor = palette.getDarkMutedColor(6723232);
                     int backgroundConstraint = palette.getLightVibrantColor(6723232);
-                    int backgroundLinear = palette.getDarkVibrantColor(6723232);
                     releaseyear_textview.setTextColor(textColor);
                     title_textview.setTextColor(textColor);
                     constraintLayout.setBackgroundColor(backgroundConstraint);
-                    detailsLayout.setBackgroundColor(backgroundLinear);
+                    detailsLayout.setBackgroundColor(textColor);
                 }
             });
     }
 
     private void initMovie() {
+
         try {
             JSONObject movieJson = new JSONObject(getIntent().getStringExtra(MovieGenerator.EXTRA_JSONSTRING));
             movie_title = movieJson.getString("Title");
@@ -147,9 +162,20 @@ public class DisplayMovieActivity extends AppCompatActivity {
             movie_runtime = movieJson.getString("Runtime");
             movie_genre = movieJson.getString("Genre");
             movie_plot = movieJson.getString("Plot");
+            movie_director = movieJson.getString("Director");
+            movie_actors = movieJson.getString("Actors");
+
+            imdbId = movieJson.getString("imdbID");
+
+            trailerGenerator = new TrailerGenerator(this.imdbId, context, this);
+            trailerGenerator.generateTrailer();
+
             posterUrl = movieJson.getString("Poster");
 
             title_textview.setText(movie_title);
+            actor_textview.setText(movie_actors);
+            director_textview.setText(movie_director);
+            runtime_textview.setText("Runtime: " + movie_runtime);
             releaseyear_textview.setText(movie_year);
             plot_textview.setText(movie_plot);
             genre_textview.setText(movie_genre);

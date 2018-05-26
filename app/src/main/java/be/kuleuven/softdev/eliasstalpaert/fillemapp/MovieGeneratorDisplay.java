@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MovieGenerator {
+public class MovieGeneratorDisplay {
 
     public static final String EXTRA_JSONSTRING = "be.kuleuven.softdev.eliasstalpaert.fillemapp.JSONSTRING";
     public static final String EXTRA_BEGINYEAR = "be.kuleuven.softdev.eliasstalpaert.fillemapp.BEGINYEAR";
@@ -42,11 +42,16 @@ public class MovieGenerator {
     private Integer endyear;
     private Integer minVotes;
     private Integer generateTries;
-    private MainActivity mainActivity;
+
+    private DisplayMovieActivity displayMovieActivity;
 
     public void generate(){
         generateTries = 1;
         generateMovie();
+    }
+
+    public String getJsonString() {
+        return jsonString;
     }
 
     public void setRating_float(Float rating_float) {
@@ -65,12 +70,12 @@ public class MovieGenerator {
         this.minVotes = minVotes;
     }
 
-    public MovieGenerator(Context context, Menu menu, MainActivity mainActivity) {
+    public MovieGeneratorDisplay(Context context, Menu menu, DisplayMovieActivity displayMovieActivity) {
         genres = new TreeMap<>();
         requestQueue = Volley.newRequestQueue(context);
         this.context = context;
         this.menu = menu;
-        this.mainActivity = mainActivity;
+        this.displayMovieActivity = displayMovieActivity;
 
         genres.put("action",getMenuItem(R.id.actionGenre));
         genres.put("adventure",getMenuItem(R.id.adventureGenre));
@@ -132,7 +137,6 @@ public class MovieGenerator {
                         catch(JSONException e) {
                             fetchMovie.cancel();
                             Toast.makeText(context, "No movies found", Toast.LENGTH_SHORT).show();
-                            reEnableInput();
                         }
                     }
                 },
@@ -141,14 +145,9 @@ public class MovieGenerator {
                     public void onErrorResponse(VolleyError error) {
                         fetchMovie.cancel();
                         Toast.makeText(context, "Unable to fetch data: please check your internet connection", Toast.LENGTH_SHORT).show();
-                        reEnableInput();
                     }
                 });
         requestQueue.add(request);
-    }
-
-    private void reEnableInput(){
-        mainActivity.setInputEnabled(true);
     }
 
     private void checkResponse() {
@@ -163,6 +162,7 @@ public class MovieGenerator {
                             if(response.equals("True")){
                                 jsonString = responseObject.toString(); // save JSONObject to String
                                 fetchMovie.cancel(); // cancel Toast "Fetching movie..."
+                                displayMovieActivity.finishActivity();
                                 startDisplayActivity(); // goto displayactivity
                             }
                             else{

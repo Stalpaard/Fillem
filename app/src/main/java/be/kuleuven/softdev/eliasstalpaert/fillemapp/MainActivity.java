@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -60,6 +61,19 @@ public class MainActivity extends AppCompatActivity {
     private Float rating_float;
 
     @Override
+    protected void onResume(){
+        super.onResume();
+        setInputEnabled(true);
+    }
+
+    public void setInputEnabled(boolean state){
+        button_movie.setEnabled(state);
+        ratingBar.setEnabled(state);
+        rangeBarYear.setEnabled(state);
+        seekbarVotes.setEnabled(state);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -67,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
         mMenu = mNavigationView.getMenu();
-        movieGenerator = new MovieGenerator(this, mMenu);
+        movieGenerator = new MovieGenerator(this, mMenu, this);
 
         textView_movie = findViewById(R.id.textView_movie);
         textView_rating = findViewById(R.id.textView_rating);
@@ -90,14 +104,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 movieGenerator.generate();
+                setInputEnabled(false);
             }
         });
+
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 rating_float = rating * 2;
                 movieGenerator.setRating_float(rating_float);
-                textView_rating.setText(rating_float.toString().trim());
+                textView_rating.setText("Minimum Rating: " + rating_float.toString().trim());
             }
         });
         rangeBarYear.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
