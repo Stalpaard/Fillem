@@ -40,7 +40,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/helpHistory1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -50,7 +50,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/helpHistory3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -60,7 +60,7 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/helpHistory2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"

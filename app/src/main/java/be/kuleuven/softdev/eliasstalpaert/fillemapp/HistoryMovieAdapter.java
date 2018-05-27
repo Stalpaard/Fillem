@@ -19,13 +19,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class HistoryMovieAdapter extends RecyclerView.Adapter<HistoryMovieAdapter.HistoryMovieViewHolder> implements ItemTouchHelperAdapter {
 
@@ -34,9 +30,11 @@ public class HistoryMovieAdapter extends RecyclerView.Adapter<HistoryMovieAdapte
     private Context hCtx; //needed for layoutinflater
     private List<HistoryMovie> movieList;
     private HistoryMovie movieBind;
+    private Boolean history_enable;
 
-    public HistoryMovieAdapter(Context hCtx, List<HistoryMovie> movieList) {
+    public HistoryMovieAdapter(Context hCtx, List<HistoryMovie> movieList, Boolean history_enable) {
         this.hCtx = hCtx;
+        this.history_enable = history_enable;
         this.movieList = movieList;
     }
 
@@ -88,10 +86,33 @@ public class HistoryMovieAdapter extends RecyclerView.Adapter<HistoryMovieAdapte
     }
 
     @Override
-    public void onItemDismiss(int position) {
-        MainActivity.history.remove(movieList.get(position).getMovieImdbId());
-        movieList.remove(position);
+    public void onItemDismiss(int position) throws NullPointerException{
+        if(history_enable){
+            MainActivity.history.remove(movieList.get(position).getMovieImdbId());
+            movieList.remove(position);
+        }
+        else{
+            try {
+                String id = MainActivity.watchList.get(position).getMovieImdbId();
+                MainActivity.watchList.remove(position);
+                Iterator<String> it = MainActivity.watchString.iterator();
+                boolean found = false;
+                while (it.hasNext() && !found) {
+                    String next = it.next();
+                    if (next.equals(id)) {
+                        it.remove();
+                        found = true;
+                    }
+                }
+
+                MainActivity.saveWatchList(hCtx);
+            }
+            catch (NullPointerException e){
+                notifyDataSetChanged();
+            }
+        }
         notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     class HistoryMovieViewHolder extends RecyclerView.ViewHolder

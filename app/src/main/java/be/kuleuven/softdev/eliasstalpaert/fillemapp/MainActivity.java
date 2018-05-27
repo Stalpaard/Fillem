@@ -2,6 +2,7 @@ package be.kuleuven.softdev.eliasstalpaert.fillemapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,7 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.edmodo.rangebar.RangeBar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -32,8 +36,13 @@ import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String WATCHLIST = "be.kuleuven.softdev.eliasstalpaert.fillemapp.WATCHLIST";
+    public static final String HISTORYENABLE = "be.kuleuven.softdev.eliasstalpaert.fillemapp.HISTORYENABLE";
+
     public static List<String> history;
     public static List<HistoryMovie> historyMoviesList;
+    public static ArrayList<HistoryMovie> watchList;
+    public static List<String> watchString;
     public static Context mContext;
     public static Menu mMenu;
 
@@ -43,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView mNavigationView;
     private CardView helpScreen;
     private TextView textView_rating, textView_beginyear, textView_endyear, textView_minVotes;
-    private Button button_movie, historyButton, helpMainButton, helpMainCloseButton, closeGenresButton, cancelMainButton;
+    private Button button_movie, historyButton, helpMainButton, helpMainCloseButton, closeGenresButton, cancelMainButton, watchListButton;
     private RangeBar rangeBarYear;
     private SeekBar seekbarVotes;
     private MovieGenerator movieGenerator;
@@ -67,9 +76,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loadWatchList(this);
         this.findViews();
         this.setOnClickListeners();
 
+        populateWatchString();
         history = new ArrayList<>();
         historyMoviesList = new LinkedList<>();
         mMenu = mNavigationView.getMenu();
@@ -84,6 +95,60 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public static void populateWatchString(){
+        watchString = new ArrayList<>();
+        for(HistoryMovie h : MainActivity.watchList){
+            watchString.add(h.getMovieImdbId());
+        }
+    }
+
+    public static SharedPreferences getSharedPreferences (Context ctxt) {
+        return ctxt.getSharedPreferences("shared preferences", MODE_PRIVATE);
+    }
+
+    public static void loadWatchList(Context ctx){
+        SharedPreferences sharedPreferences = MainActivity.getSharedPreferences(ctx);
+        Gson gson = new Gson();
+        String watchListJson = sharedPreferences.getString("watchlist", null);
+        Type type = new TypeToken<ArrayList<HistoryMovie>>() {}.getType();
+        MainActivity.watchList = gson.fromJson(watchListJson,type);
+        if(MainActivity.watchList == null){
+            MainActivity.watchList = new ArrayList<>();
+        }
+        populateWatchString();
+    }
+
+    public static void saveWatchList(Context ctx){
+        SharedPreferences sharedPreferences = MainActivity.getSharedPreferences(ctx);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String jsonWatchlist = gson.toJson(MainActivity.watchList);
+        editor.putString("watchlist", jsonWatchlist);
+        editor.apply();
+    }
+    /*
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        if(watchList == null){
+            watchList = new ArrayList<>();
+        }
+        else if(watchList.isEmpty()){
+            watchList = new ArrayList<>();
+        }
+        savedInstanceState.putParcelableArrayList(WATCHLIST, watchList);
+
+    }
+    */
+    /*
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        watchList = savedInstanceState.getParcelableArrayList(WATCHLIST);
+    }
+    */
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -95,6 +160,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners(){
+        watchListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startWatchListActivity();
+            }
+        });
+
         button_movie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
         helpMainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 helpScreen.setVisibility(View.VISIBLE);
             }
         });
@@ -198,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void findViews(){
+        watchListButton = findViewById(R.id.watchListButton);
         historyButton = findViewById(R.id.historyButton);
         mConstraintLayout = findViewById(R.id.constraintLayoutMain);
         closeGenresButton = findViewById(R.id.closeGenres);
@@ -261,6 +335,10 @@ public class MainActivity extends AppCompatActivity {
         seekbarVotes.setProgress(50);
     }
 
+    private void finishActivity(){
+        finish();
+    }
+
     public void hideCancel(){
         cancelMainButton.setEnabled(true);
         cancelMainButton.setVisibility(View.GONE);
@@ -279,6 +357,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void startHistoryActivity(){
         Intent intent = new Intent(this, HistoryScreenRecycler.class);
+        intent.putExtra(HISTORYENABLE, true);
+        this.startActivity(intent);
+    }
+
+    private void startWatchListActivity(){
+        Intent intent = new Intent(this, HistoryScreenRecycler.class);
+        intent.putExtra(HISTORYENABLE, false);
         this.startActivity(intent);
     }
 

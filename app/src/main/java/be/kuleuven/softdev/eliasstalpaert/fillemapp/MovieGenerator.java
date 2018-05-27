@@ -59,31 +59,6 @@ public class MovieGenerator {
         initGenres();
     }
 
-    public void generate(){
-        generateTries = 0;
-        overallTries = 0;
-        fetchMovie = Toast.makeText(context, "Fetching movie...", Toast.LENGTH_SHORT);
-        fetchMovie.show();
-        calculateLimit();
-    }
-
-    public void setRating_float(Float rating_float) {
-        this.rating_float = rating_float*10;
-    }
-
-    public void setBeginyear(Integer beginyear) {
-        this.beginyear = beginyear;
-    }
-
-    public void setEndyear(Integer endyear) {
-        this.endyear = endyear;
-    }
-
-    public void setMinVotes(Integer minVotes) {
-        this.minVotes = minVotes;
-    }
-
-
     private void initGenres(){
         genres.put("action",getMenuItem(R.id.actionGenre));
         genres.put("adventure",getMenuItem(R.id.adventureGenre));
@@ -112,22 +87,43 @@ public class MovieGenerator {
         genres.put("western",getMenuItem(R.id.westernGenre));
     }
 
-    private void startDisplayActivity() {
-        Intent intent = new Intent(context, DisplayMovieActivity.class);
 
-        intent.putExtra(EXTRA_JSONSTRING, jsonString);
-        intent.putExtra(EXTRA_BEGINYEAR, beginyear);
-        intent.putExtra(EXTRA_ENDYEAR, endyear);
-        intent.putExtra(EXTRA_RATING, rating_float);
-        intent.putExtra(EXTRA_MINVOTES, minVotes);
-        intent.putExtra(HistoryMovieAdapter.EXTRA_NOGENERATE, false);
-
-        context.startActivity(intent);
+    public void generate(){
+        generateTries = 0;
+        overallTries = 0;
+        fetchMovie = Toast.makeText(context, "Fetching movie...", Toast.LENGTH_SHORT);
+        fetchMovie.show();
+        calculateLimit();
     }
 
-    private MenuItem getMenuItem(int id){
-        return menu.findItem(id);
+    public void setRating_float(Float rating_float) {
+        this.rating_float = rating_float*10;
     }
+
+    public void setBeginyear(Integer beginyear) {
+        this.beginyear = beginyear;
+    }
+
+    public void setEndyear(Integer endyear) {
+        this.endyear = endyear;
+    }
+
+    public void setMinVotes(Integer minVotes) {
+        this.minVotes = minVotes;
+    }
+
+    public void setEnabled(boolean enabled){
+        this.enabled = enabled;
+    }
+
+    private void reEnableInput(){
+        mainActivity.setInputEnabled(true);
+    }
+
+    private void cancelToasts(){
+        fetchMovie.cancel();
+    }
+
 
     private void calculateLimit(){
         String queryUrl = buildUrl("http://api.a17-sd206.studev.groept.be/get_size_of_results");
@@ -143,6 +139,7 @@ public class MovieGenerator {
                                 generateMovie();
                             }
                             else{
+                                mainActivity.hideCancel();
                                 Toast.makeText(context, "No movies found", Toast.LENGTH_SHORT).show();
                                 reEnableInput();
                             }
@@ -198,18 +195,6 @@ public class MovieGenerator {
         }
     }
 
-    private void reEnableInput(){
-        mainActivity.setInputEnabled(true);
-    }
-
-    private boolean isEnabled(){
-        return this.enabled;
-    }
-
-    public void setEnabled(boolean enabled){
-        this.enabled = enabled;
-    }
-
     private void checkResponse() {
         overallTries++;
         if(overallTries % 5 == 0 && overallTries < 20){
@@ -243,6 +228,7 @@ public class MovieGenerator {
                                     jsonString = responseObject.toString();
                                     MainActivity.historyMoviesList.add(new HistoryMovie(jsonString));
                                     cancelToasts();
+                                    mainActivity.hideCancel();
                                     startDisplayActivity();
                                 } else {
                                     if (isEnabled()) {
@@ -263,24 +249,6 @@ public class MovieGenerator {
                     });
             requestQueue.add(jsonObjectRequest);
         }
-    }
-
-    private void cancelToasts(){
-        fetchMovie.cancel();
-    }
-
-    private boolean historyContainsId(String imdbId){
-        if(MainActivity.history.contains(imdbId)){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    private boolean localHistoryContainsId(String imdbId){
-        if(localHistory.contains(imdbId)) return true;
-        else return false;
     }
 
     private String buildUrl(String url){
@@ -320,4 +288,42 @@ public class MovieGenerator {
         }
         return queryUrl;
     }
+
+    private void startDisplayActivity() {
+        Intent intent = new Intent(context, DisplayMovieActivity.class);
+
+        intent.putExtra(EXTRA_JSONSTRING, jsonString);
+        intent.putExtra(EXTRA_BEGINYEAR, beginyear);
+        intent.putExtra(EXTRA_ENDYEAR, endyear);
+        intent.putExtra(EXTRA_RATING, rating_float);
+        intent.putExtra(EXTRA_MINVOTES, minVotes);
+        intent.putExtra(HistoryMovieAdapter.EXTRA_NOGENERATE, false);
+
+        context.startActivity(intent);
+    }
+
+
+    private MenuItem getMenuItem(int id){
+        return menu.findItem(id);
+    }
+
+    private boolean isEnabled(){
+        return this.enabled;
+    }
+
+    private boolean historyContainsId(String imdbId){
+        if(MainActivity.history.contains(imdbId)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    private boolean localHistoryContainsId(String imdbId){
+        if(localHistory.contains(imdbId)) return true;
+        else return false;
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package be.kuleuven.softdev.eliasstalpaert.fillemapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.constraint.ConstraintLayout;
@@ -16,28 +17,31 @@ import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class DisplayMovieActivity extends AppCompatActivity {
 
     private RequestQueue requestQueue;
-    private TextView title_textview, releaseyear_textview, plot_textview, genre_textview, director_textview, actor_textview, runtime_textview, rating_textview, votes_textview;
     private Context context = this;
+
     private ConstraintLayout constraintLayout;
     private LinearLayout detailsLayout;
 
     private String movie_title, movie_year, movie_runtime, movie_genre, movie_director, movie_actors, movie_plot, imdbId, posterUrl, imdbRating, imdhVotes;
-
     private Boolean no_generate;
-
     private Integer beginyear, endyear, minVotes;
     private Float rating_float;
 
-    private Button generateAgain, trailerPlayButton, exitDisplayButton, cancelDisplayButton;
+    private Button generateAgain, trailerPlayButton, exitDisplayButton, cancelDisplayButton, addToWatchlistButton;
+    private TextView title_textview, releaseyear_textview, plot_textview, genre_textview, director_textview, actor_textview, runtime_textview, rating_textview, votes_textview;
     private ImageView imageView_internet;
+
     private MovieGeneratorDisplay movieGenerator;
     private TrailerGenerator trailerGenerator;
 
@@ -55,8 +59,13 @@ public class DisplayMovieActivity extends AppCompatActivity {
 
         initMovieVariables();
         updateMovieDetails();
+        changeWatchlistButton();
 
         postInit();
+    }
+
+    private void saveWatchlist(){
+        MainActivity.saveWatchList(this);
     }
 
     private void initIntentExtras(){
@@ -68,6 +77,17 @@ public class DisplayMovieActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners(){
+        addToWatchlistButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HistoryMovie h = new HistoryMovie(getIntent().getStringExtra(MovieGenerator.EXTRA_JSONSTRING));
+                MainActivity.watchList.add(h);
+                saveWatchlist();
+                changeWatchlistButton();
+                Toast.makeText(context, "Added to watchlist", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         generateAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +127,7 @@ public class DisplayMovieActivity extends AppCompatActivity {
 
     private void findViews(){
         title_textview = findViewById(R.id.textView_title);
+        addToWatchlistButton = findViewById(R.id.addToWatchlistButton);
         releaseyear_textview = findViewById(R.id.textView_displayReleaseYear);
         plot_textview = findViewById(R.id.textViewPlot);
         rating_textview = findViewById(R.id.ratingDisplay_textview);
@@ -200,6 +221,23 @@ public class DisplayMovieActivity extends AppCompatActivity {
         });
     }
 
+    private void changeWatchlistButton(){
+        if(isInWatchlist()){
+            addToWatchlistButton.setEnabled(false);
+            addToWatchlistButton.setText("In watchlist");
+        }
+    }
+
+    public boolean isInWatchlist(){
+        MainActivity.loadWatchList(this);
+        if(MainActivity.watchString.contains(this.imdbId)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public void reEnableInput(){
         cancelDisplayButton.setVisibility(View.GONE);
         cancelDisplayButton.setEnabled(true);
@@ -207,6 +245,8 @@ public class DisplayMovieActivity extends AppCompatActivity {
     }
 
     public void finishActivity(){
+        cancelDisplayButton.setVisibility(View.GONE);
+        cancelDisplayButton.setEnabled(true);
         movieGenerator.setEnabled(false);
         movieGenerator = null;
         this.finish();
