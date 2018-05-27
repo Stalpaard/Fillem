@@ -120,6 +120,7 @@ public class DisplayMovieActivity extends AppCompatActivity {
         exitDisplayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                movieGenerator.setEnabled(false);
                 finishActivity();
             }
         });

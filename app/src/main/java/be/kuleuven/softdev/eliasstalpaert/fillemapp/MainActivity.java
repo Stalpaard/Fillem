@@ -3,6 +3,7 @@ package be.kuleuven.softdev.eliasstalpaert.fillemapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         loadWatchList(this);
         this.findViews();
         this.setOnClickListeners();
@@ -126,28 +129,6 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("watchlist", jsonWatchlist);
         editor.apply();
     }
-    /*
-
-    @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        if(watchList == null){
-            watchList = new ArrayList<>();
-        }
-        else if(watchList.isEmpty()){
-            watchList = new ArrayList<>();
-        }
-        savedInstanceState.putParcelableArrayList(WATCHLIST, watchList);
-
-    }
-    */
-    /*
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        watchList = savedInstanceState.getParcelableArrayList(WATCHLIST);
-    }
-    */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -308,6 +289,8 @@ public class MainActivity extends AppCompatActivity {
         try{
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+            actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_background_no_black));
+            actionBar.setTitle(Html.fromHtml("<font color='#444536'>Genres</font>"));
         }
         catch (NullPointerException n){
             Toast.makeText(this, "Nullpointer Exception ActionBar", Toast.LENGTH_SHORT).show();
@@ -317,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
     private void initMovieGen(){
         movieGenerator.setBeginyear(beginyear);
         movieGenerator.setEndyear(endyear);
-        movieGenerator.setMinVotes(endyear);
+        movieGenerator.setMinVotes(minVotes);
         movieGenerator.setRating_float(rating_float);
     }
 
@@ -325,10 +308,11 @@ public class MainActivity extends AppCompatActivity {
         beginyear = 1894;
         endyear = 2018;
         minVotes = calcVotesFromProgress(50);
-        rating_float = 0f;
+        rating_float = 2.5f;
+        ratingBar.setRating(2.5f);
         textView_beginyear.setText(beginyear.toString());
         textView_endyear.setText(endyear.toString());
-        textView_rating.setText("Minimum Rating");
+        textView_rating.setText("Minimum Rating: " + rating_float);
         textView_minVotes.setText(minVotes.toString());
         rangeBarYear.setTickCount(127);
         rangeBarYear.setThumbRadius(10);
@@ -352,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int calcVotesFromProgress(int progress){
-        return (((progress)*1953205)/100) + 5;
+        return (((progress)*1000000)/100) + 5;
     }
 
     private void startHistoryActivity(){

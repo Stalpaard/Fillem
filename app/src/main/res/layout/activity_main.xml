@@ -7,9 +7,11 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/background2">
 
         <android.support.v7.widget.CardView
             android:id="@+id/helpMainCardView"
@@ -99,10 +101,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="250dp"
-                android:text="TextView"
+                android:layout_marginTop="232dp"
+                android:text="Minimum Rating"
+                android:textColor="@android:color/white"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.502"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_movie" />
 
@@ -156,6 +160,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="96dp"
                 android:text="Choose Filters"
+                android:textColor="@android:color/white"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -171,7 +176,8 @@
                 android:layout_marginEnd="200dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="50dp"
-                android:text="TextView"
+                android:text="beginyear"
+                android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -185,7 +191,8 @@
                 android:layout_marginEnd="43dp"
                 android:layout_marginStart="600dp"
                 android:layout_marginTop="50dp"
-                android:text="TextView"
+                android:text="endyear"
+                android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/rangebarYear"
                 app:layout_constraintStart_toStartOf="parent"
@@ -200,6 +207,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Minimum Amount of Votes"
+                android:textColor="@android:color/white"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -215,6 +223,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:text="Release Year Range"
+                android:textColor="@android:color/white"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -247,7 +256,8 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:text="123456"
+                android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -268,7 +278,7 @@
                 app:layout_constraintHorizontal_bias="0.971"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.037" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <Button
                 android:id="@+id/cancelMainButton"
@@ -298,10 +308,10 @@
                 android:text="Watchlist"
                 app:layout_constraintBottom_toBottomOf="@+id/button_movie"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.553"
+                app:layout_constraintHorizontal_bias="0.554"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.038" />
+                app:layout_constraintVertical_bias="0.0" />
 
         </android.support.constraint.ConstraintLayout>
 
