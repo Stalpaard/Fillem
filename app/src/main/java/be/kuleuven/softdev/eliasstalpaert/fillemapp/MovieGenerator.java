@@ -37,7 +37,7 @@ public class MovieGenerator {
     private Map<String,MenuItem> genres;
     private Menu menu;
     private Float rating_float;
-    private Integer beginyear, endyear, minVotes, limitOfTries, generateTries;
+    private Integer beginyear, endyear, minVotes, limitOfTries;
     private MainActivity mainActivity;
 
 
@@ -46,7 +46,6 @@ public class MovieGenerator {
         this.menu = menu;
         this.mainActivity = mainActivity;
 
-        generateTries = 1;
         genres = new TreeMap<>();
         requestQueue = Volley.newRequestQueue(context);
 
@@ -61,22 +60,18 @@ public class MovieGenerator {
 
     public void setRating_float(Float rating_float) {
         this.rating_float = rating_float*10;
-        generateTries = 1;
     }
 
     public void setBeginyear(Integer beginyear) {
         this.beginyear = beginyear;
-        generateTries = 1;
     }
 
     public void setEndyear(Integer endyear) {
         this.endyear = endyear;
-        generateTries = 1;
     }
 
     public void setMinVotes(Integer minVotes) {
         this.minVotes = minVotes;
-        generateTries = 1;
     }
 
 
@@ -138,7 +133,7 @@ public class MovieGenerator {
                             generateMovie();
                         }
                         catch(JSONException e) {
-                            Toast.makeText(context, "Couldn't calculate limit of tries, try again or restart" + generateTries.toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Couldn't calculate limit of tries, try again or restart", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
@@ -152,9 +147,7 @@ public class MovieGenerator {
     }
 
     private void generateMovie() {
-        generateTries++;
-
-        if(generateTries > limitOfTries){
+        if(MainActivity.history.size() >= limitOfTries){
             Toast.makeText(context, "All possible results have been found, change filters (all results are in history)", Toast.LENGTH_SHORT).show();
             reEnableInput();
         }

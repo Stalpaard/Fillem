@@ -37,7 +37,7 @@ public class MovieGeneratorDisplay {
     private Map<String,MenuItem> genres;
     private Menu menu;
     private Float rating_float;
-    private Integer beginyear, endyear, minVotes, limitOfTries, generateTries;
+    private Integer beginyear, endyear, minVotes, limitOfTries;
     private DisplayMovieActivity displayMovieActivity;
 
     public MovieGeneratorDisplay(Context context, Menu menu, DisplayMovieActivity displayMovieActivity) {
@@ -49,7 +49,6 @@ public class MovieGeneratorDisplay {
         requestQueue = Volley.newRequestQueue(context);
 
         initGenres();
-        generateTries = 1;
     }
 
     public void generate(){
@@ -60,22 +59,18 @@ public class MovieGeneratorDisplay {
 
     public void setRating_float(Float rating_float) {
         this.rating_float = rating_float*10;
-        generateTries = 1;
     }
 
     public void setBeginyear(Integer beginyear) {
         this.beginyear = beginyear;
-        generateTries = 1;
     }
 
     public void setEndyear(Integer endyear) {
         this.endyear = endyear;
-        generateTries = 1;
     }
 
     public void setMinVotes(Integer minVotes) {
         this.minVotes = minVotes;
-        generateTries = 1;
     }
 
     private void initGenres(){
@@ -134,7 +129,7 @@ public class MovieGeneratorDisplay {
                             generateMovie();
                         }
                         catch(JSONException e) {
-                            Toast.makeText(context, "Couldn't calculate limit of tries, try again or restart" + generateTries.toString(), Toast.LENGTH_SHORT);
+                            Toast.makeText(context, "Couldn't calculate limit of tries, try again or restart", Toast.LENGTH_SHORT);
                         }
                     }
                 },
@@ -148,8 +143,7 @@ public class MovieGeneratorDisplay {
     }
 
     private void generateMovie() {
-        generateTries++;
-        if(generateTries > limitOfTries){
+        if(MainActivity.history.size() >= limitOfTries){
             Toast.makeText(MainActivity.mContext, "All possible results have been found, change filters (all results are in history)", Toast.LENGTH_SHORT).show();
             displayMovieActivity.finishActivity();
         }

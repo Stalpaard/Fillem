@@ -21,7 +21,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class HistoryMovieAdapter extends RecyclerView.Adapter<HistoryMovieAdapter.HistoryMovieViewHolder> implements ItemTouchHelperAdapter {
 
@@ -85,10 +89,8 @@ public class HistoryMovieAdapter extends RecyclerView.Adapter<HistoryMovieAdapte
 
     @Override
     public void onItemDismiss(int position) {
+        MainActivity.history.remove(movieList.get(position).getMovieImdbId());
         movieList.remove(position);
-        if(movieList.isEmpty()){
-            MainActivity.history = new ArrayList<>();
-        }
         notifyItemRemoved(position);
     }
 

@@ -29,6 +29,10 @@ public class HistoryMovie {
         return jsonString;
     }
 
+    public String getMovieImdbId() {
+        return movieImdbId;
+    }
+
     public String getMovieTitle() {
         return movieTitle;
     }

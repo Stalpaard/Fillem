@@ -12,8 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeMap;
 
 public class HistoryScreenRecycler extends AppCompatActivity {
 
@@ -42,9 +44,11 @@ public class HistoryScreenRecycler extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        finishActivity();
+    protected void onDestroy() {
+        super.onDestroy();
+        if(MainActivity.historyMoviesList.isEmpty()){
+            MainActivity.history = new ArrayList<>();
+        }
     }
 
     private void itemTouchHelperCallbackInit() {
