@@ -36,7 +36,7 @@ public class DisplayMovieActivity extends AppCompatActivity {
     private Integer beginyear, endyear, minVotes;
     private Float rating_float;
 
-    private Button generateAgain, trailerPlayButton;
+    private Button generateAgain, trailerPlayButton, exitDisplayButton;
     private ImageView imageView_internet;
     private MovieGeneratorDisplay movieGenerator;
     private TrailerGenerator trailerGenerator;
@@ -87,6 +87,13 @@ public class DisplayMovieActivity extends AppCompatActivity {
                 trailerGenerator.watchYoutubeVideo(context, youtubeId);
             }
         });
+
+        exitDisplayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishActivity();
+            }
+        });
     }
 
     private void findViews(){
@@ -102,6 +109,7 @@ public class DisplayMovieActivity extends AppCompatActivity {
         detailsLayout = findViewById(R.id.detailsLayout);
         generateAgain = findViewById(R.id.generateAgain);
         imageView_internet = findViewById(R.id.imageView_internet);
+        exitDisplayButton = findViewById(R.id.exitDisplayButton);
     }
 
     private void loadImageByUrl(String posterUrl) {

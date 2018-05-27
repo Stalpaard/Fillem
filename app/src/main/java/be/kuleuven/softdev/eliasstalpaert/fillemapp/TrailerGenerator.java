@@ -132,7 +132,7 @@ public class TrailerGenerator {
                 try{
                     if(!trailer.isNull("key")){
                         youtubeId = trailer.getString("key");
-                        Toast.makeText(context, "Trailers found!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Trailer found!", Toast.LENGTH_SHORT).show();
                         trailerCardview.setVisibility(View.VISIBLE);
                     }
                 }

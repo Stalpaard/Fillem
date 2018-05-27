@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <Button
+        android:id="@+id/exitDisplayButton"
+        android:layout_width="43dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="X"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraint"
         android:layout_width="match_parent"
@@ -271,5 +281,6 @@
             android:layout_marginBottom="15dp"
             android:layout_marginEnd="35dp"
             android:text="Generate Again" />
+
     </RelativeLayout>
 </RelativeLayout>

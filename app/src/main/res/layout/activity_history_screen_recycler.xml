@@ -7,6 +7,16 @@
     tools:context=".HistoryScreenRecycler">
 
     <Button
+        android:id="@+id/exitHistoryButton"
+        android:layout_width="43dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="X"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <Button
         android:id="@+id/clearHistoryRecycler"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,7 +24,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="36dp"
         android:layout_marginEnd="34dp"
-        android:text="CLEAR"
+        android:text="CLEAR ALL"
         android:visibility="gone" />
 
     <RelativeLayout

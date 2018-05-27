@@ -19,9 +19,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class HistoryMovieAdapter extends RecyclerView.Adapter<HistoryMovieAdapter.HistoryMovieViewHolder> {
+public class HistoryMovieAdapter extends RecyclerView.Adapter<HistoryMovieAdapter.HistoryMovieViewHolder> implements ItemTouchHelperAdapter {
 
     public static final String EXTRA_NOGENERATE = "be.kuleuven.softdev.eliasstalpaert.fillemapp.NOGENERATE";
 
@@ -65,6 +67,29 @@ public class HistoryMovieAdapter extends RecyclerView.Adapter<HistoryMovieAdapte
     @Override
     public int getItemCount() {
         return movieList.size();
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(movieList, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(movieList, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        movieList.remove(position);
+        if(movieList.isEmpty()){
+            MainActivity.history = new ArrayList<>();
+        }
+        notifyItemRemoved(position);
     }
 
     class HistoryMovieViewHolder extends RecyclerView.ViewHolder
