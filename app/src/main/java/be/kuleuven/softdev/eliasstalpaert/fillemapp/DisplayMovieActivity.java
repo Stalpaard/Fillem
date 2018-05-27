@@ -212,12 +212,12 @@ public class DisplayMovieActivity extends AppCompatActivity {
     private void changeColours(Bitmap b){
         Palette.from(b).generate(new Palette.PaletteAsyncListener() {
             public void onGenerated(Palette palette) {
-                int textColor = palette.getVibrantColor(6723232);
+                int detailsColor = palette.getDominantColor(6723232);
                 int backgroundConstraint = palette.getLightVibrantColor(6723232);
-                //releaseyear_textview.setTextColor(textColor);
-                //title_textview.setTextColor(textColor);
+                //releaseyear_textview.setTextColor(detailsColor);
+                //title_textview.setTextColor(detailsColor);
                 constraintLayout.setBackgroundColor(backgroundConstraint);
-                detailsLayout.setBackgroundColor(textColor);
+                detailsLayout.setBackgroundColor(detailsColor);
             }
         });
     }

@@ -336,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int calcVotesFromProgress(int progress){
-        return (((progress)*1000000)/100) + 5;
+        return (((progress)*1000000)/100);
     }
 
     private void startHistoryActivity(){
