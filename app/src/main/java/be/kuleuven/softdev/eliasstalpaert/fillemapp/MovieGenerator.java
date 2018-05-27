@@ -19,7 +19,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class MovieGenerator {
 
@@ -30,6 +32,7 @@ public class MovieGenerator {
     public static final String EXTRA_MINVOTES = "be.kuleuven.softdev.eliasstalpaert.fillemapp.MINVOTES";
 
     private Context context;
+    private Set<String> localHistory;
     private JSONObject movie;
     private String current_movie_id, jsonString;
     private Toast fetchMovie;
@@ -44,6 +47,7 @@ public class MovieGenerator {
     public MovieGenerator(Context context, Menu menu, MainActivity mainActivity) {
         this.context = context;
         this.menu = menu;
+        this.localHistory = new TreeSet<>();
         this.mainActivity = mainActivity;
 
         genres = new TreeMap<>();
@@ -142,13 +146,14 @@ public class MovieGenerator {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(context, "Unable to fetch data: please check your internet connection", Toast.LENGTH_SHORT).show();
+                        reEnableInput();
                     }
                 });
         requestQueue.add(request);
     }
 
     private void generateMovie() {
-        if(generateTries > limitOfTries){
+        if(generateTries >= limitOfTries){
             Toast.makeText(context, "All possible results have been found, change filters (all results are in history)", Toast.LENGTH_SHORT).show();
             reEnableInput();
         }
@@ -196,7 +201,8 @@ public class MovieGenerator {
                     public void onResponse(JSONObject responseObject) {
                         try {
                             String response = responseObject.getString("Response");
-                            if(response.equals("True") && historyContainsId(current_movie_id)){
+                            if(response.equals("True") && historyContainsId(current_movie_id) && !(localHistory.contains(current_movie_id))){
+                                localHistory.add(current_movie_id);
                                 generateTries++;
                             }
                             if(response.equals("True") && !(historyContainsId(current_movie_id))){
@@ -231,6 +237,11 @@ public class MovieGenerator {
         else{
             return false;
         }
+    }
+
+    private boolean localHistoryContainsId(String imdbId){
+        if(localHistory.contains(imdbId)) return true;
+        else return false;
     }
 
     private String buildUrl(String url){

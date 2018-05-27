@@ -19,7 +19,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class MovieGeneratorDisplay {
 
@@ -35,6 +37,7 @@ public class MovieGeneratorDisplay {
     private Toast fetchMovie;
     private RequestQueue requestQueue;
     private Map<String,MenuItem> genres;
+    private Set<String> localHistory;
     private Menu menu;
     private Float rating_float;
     private Integer beginyear, endyear, minVotes, limitOfTries, generateTries;
@@ -43,6 +46,7 @@ public class MovieGeneratorDisplay {
     public MovieGeneratorDisplay(Context context, Menu menu, DisplayMovieActivity displayMovieActivity) {
         this.context = context;
         this.menu = menu;
+        this.localHistory = new TreeSet<>();
         this.displayMovieActivity = displayMovieActivity;
 
         genres = new TreeMap<>();
@@ -137,14 +141,15 @@ public class MovieGeneratorDisplay {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Unable to fetch data: please check your internet connection", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.mContext, "Unable to fetch data: please check your internet connection", Toast.LENGTH_SHORT).show();
+                        displayMovieActivity.finishActivity();
                     }
                 });
         requestQueue.add(request);
     }
 
     private void generateMovie() {
-        if(generateTries > limitOfTries){
+        if(generateTries >= limitOfTries){
             Toast.makeText(MainActivity.mContext, "All possible results have been found, change filters (all results are in history)", Toast.LENGTH_SHORT).show();
             displayMovieActivity.finishActivity();
         }
@@ -170,7 +175,8 @@ public class MovieGeneratorDisplay {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             fetchMovie.cancel();
-                            Toast.makeText(context, "Unable to fetch data: please check your internet connection", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.mContext, "Unable to fetch data: please check your internet connection", Toast.LENGTH_SHORT).show();
+                            displayMovieActivity.finishActivity();
                         }
                     });
             requestQueue.add(request);
@@ -186,7 +192,8 @@ public class MovieGeneratorDisplay {
                     public void onResponse(JSONObject responseObject) {
                         try {
                             String response = responseObject.getString("Response");
-                            if(response.equals("True") && historyContainsId(current_movie_id)){
+                            if(response.equals("True") && historyContainsId(current_movie_id) && !(localHistory.contains(current_movie_id))){
+                                localHistory.add(current_movie_id);
                                 generateTries++;
                             }
                             if(response.equals("True") && !(historyContainsId(current_movie_id))){

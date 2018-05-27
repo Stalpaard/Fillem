@@ -70,8 +70,8 @@ public class HistoryScreenRecycler extends AppCompatActivity {
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.historyMoviesList = new LinkedList<>();
-                MainActivity.history = new ArrayList<>();
+                MainActivity.historyMoviesList.clear();
+                MainActivity.history.clear();
                 Toast.makeText(MainActivity.mContext, "History cleared", Toast.LENGTH_SHORT).show();
                 finishActivity();
             }
