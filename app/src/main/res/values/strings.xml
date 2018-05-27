@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Fillem</string>
     <string name="actionBarGenres">Genres</string>
+    <string name="rating_string">Minimum Rating: </string>
 </resources>

@@ -31,6 +31,8 @@ public class DisplayMovieActivity extends AppCompatActivity {
 
     private String movie_title, movie_year, movie_runtime, movie_genre, movie_director, movie_actors, movie_plot, imdbId, posterUrl;;
 
+    private Boolean no_generate;
+
     private Integer beginyear, endyear, minVotes;
     private Float rating_float;
 
@@ -62,6 +64,7 @@ public class DisplayMovieActivity extends AppCompatActivity {
         endyear = getIntent().getIntExtra(MovieGenerator.EXTRA_ENDYEAR, 3000);
         rating_float = getIntent().getFloatExtra(MovieGenerator.EXTRA_RATING, 0);
         minVotes = getIntent().getIntExtra(MovieGenerator.EXTRA_MINVOTES, 0);
+        no_generate = getIntent().getBooleanExtra(HistoryMovieAdapter.EXTRA_NOGENERATE, false);
     }
 
     private void setOnClickListeners(){
@@ -155,15 +158,18 @@ public class DisplayMovieActivity extends AppCompatActivity {
         trailerGenerator = new TrailerGenerator(this.imdbId, context, this);
         trailerGenerator.generateTrailer();
         loadImageByUrl(posterUrl);
+        if(no_generate){
+            generateAgain.setVisibility(View.GONE);
+        }
     }
 
     private void changeColours(Bitmap b){
         Palette.from(b).generate(new Palette.PaletteAsyncListener() {
             public void onGenerated(Palette palette) {
-                int textColor = palette.getDarkVibrantColor(6723232);
+                int textColor = palette.getVibrantColor(6723232);
                 int backgroundConstraint = palette.getLightVibrantColor(6723232);
-                releaseyear_textview.setTextColor(textColor);
-                title_textview.setTextColor(textColor);
+                //releaseyear_textview.setTextColor(textColor);
+                //title_textview.setTextColor(textColor);
                 constraintLayout.setBackgroundColor(backgroundConstraint);
                 detailsLayout.setBackgroundColor(textColor);
             }

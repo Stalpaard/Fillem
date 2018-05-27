@@ -26,7 +26,6 @@
             android:text="releaseYear"
             android:textAlignment="center"
             android:textSize="20sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/textView_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView_internet"
@@ -44,6 +43,7 @@
             android:text="title"
             android:textAlignment="center"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/runTime_textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -75,6 +75,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="TextView"
+            android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView_internet"
@@ -111,7 +112,7 @@
                         android:padding="8dp">
 
                         <TextView
-                            android:id="@+id/textViewPlotTitle"
+                            android:id="@+id/historyTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
@@ -124,7 +125,7 @@
                             android:id="@+id/textViewPlot"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/textViewPlotTitle"
+                            android:layout_below="@id/historyTitle"
                             android:text="Lorem Ipsum enzovoort"
                             android:textSize="15sp" />
 

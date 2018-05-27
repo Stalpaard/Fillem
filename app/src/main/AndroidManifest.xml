@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".DisplayMovieActivity" />
-        <activity android:name=".HistoryScreen"></activity>
+        <activity android:name=".HistoryScreen" />
+        <activity android:name=".HistoryScreenRecycler"></activity>
     </application>
 
 </manifest>

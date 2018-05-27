@@ -53,6 +53,8 @@ public class MovieGeneratorDisplay {
     }
 
     public void generate(){
+        fetchMovie = Toast.makeText(context, "Fetching movie...", Toast.LENGTH_SHORT);
+        fetchMovie.show();
         calculateLimit();
     }
 
@@ -111,6 +113,7 @@ public class MovieGeneratorDisplay {
         intent.putExtra(EXTRA_ENDYEAR, endyear);
         intent.putExtra(EXTRA_RATING, rating_float);
         intent.putExtra(EXTRA_MINVOTES, minVotes);
+        intent.putExtra(HistoryMovieAdapter.EXTRA_NOGENERATE, false);
         context.startActivity(intent);
     }
 
@@ -145,8 +148,6 @@ public class MovieGeneratorDisplay {
     }
 
     private void generateMovie() {
-        fetchMovie = Toast.makeText(context, "Fetching movie... try " + generateTries.toString(), Toast.LENGTH_SHORT);
-        //fetchMovie.show();
         generateTries++;
         if(generateTries > limitOfTries){
             Toast.makeText(MainActivity.mContext, "All possible results have been found, change filters (all results are in history)", Toast.LENGTH_SHORT).show();
@@ -193,9 +194,10 @@ public class MovieGeneratorDisplay {
                             if(response.equals("True") && !(historyContainsId(current_movie_id))){
                                 MainActivity.history.add(current_movie_id);
                                 jsonString = responseObject.toString();
+                                MainActivity.historyMoviesList.add(new HistoryMovie(jsonString));
                                 fetchMovie.cancel();
-                                displayMovieActivity.finishActivity();
                                 startDisplayActivity();
+                                displayMovieActivity.finishActivity();
                             }
                             else{
                                 generateMovie();

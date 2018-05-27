@@ -33,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -40,14 +41,14 @@ import java.util.TreeMap;
 public class MainActivity extends AppCompatActivity {
 
     public static List<String> history;
+    public static List<HistoryMovie> historyMoviesList;
     public static Context mContext;
     public static Menu mMenu;
 
     private RatingBar ratingBar;
-    private ActionBar actionBar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
-    private TextView textView_movie, textView_rating, textView_beginyear, textView_endyear, textView_minVotes;
+    private TextView textView_rating, textView_beginyear, textView_endyear, textView_minVotes;
     private Button button_movie, historyButton;
     private RangeBar rangeBarYear;
     private SeekBar seekbarVotes;
@@ -65,17 +66,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //initialize variables
         this.findViews();
+
         history = new ArrayList<>();
+        historyMoviesList = new LinkedList<>();
         mMenu = mNavigationView.getMenu();
         mContext = this;
         movieGenerator = new MovieGenerator(mContext, mMenu, this);
         this.setTitle("Genres");
-        initActionBar();
-        initFilters();
-        initMovieGen();
+
+        this.initActionBar();
+        this.initFilters();
+        this.initMovieGen();
         this.setOnClickListeners();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setOnClickListeners(){
@@ -166,19 +179,23 @@ public class MainActivity extends AppCompatActivity {
         ratingBar = findViewById(R.id.ratingBar);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
-        textView_movie = findViewById(R.id.textView_movie);
         textView_rating = findViewById(R.id.textView_rating);
         textView_beginyear = findViewById(R.id.textView_beginyear);
         textView_endyear = findViewById(R.id.textView_endyear);
         textView_minVotes = findViewById(R.id.textView_minVotes);
     }
 
-    private void initActionBar(){
+    private void initActionBar() throws NullPointerException{
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ActionBar actionBar = getSupportActionBar();
+        try{
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        }
+        catch (NullPointerException n){
+            Toast.makeText(this, "Nullpointer Exception ActionBar", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initMovieGen(){
@@ -210,21 +227,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int calcVotesFromProgress(int progress){
-        return (((progress - 0)*1953205)/100) + 5;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return (((progress)*1953205)/100) + 5;
     }
 
     private void startHistoryActivity(){
-        Intent intent = new Intent(this, HistoryScreen.class);
+        Intent intent = new Intent(this, HistoryScreenRecycler.class);
         this.startActivity(intent);
     }
 
