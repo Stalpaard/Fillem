@@ -37,7 +37,7 @@ public class MovieGeneratorDisplay {
     private Map<String,MenuItem> genres;
     private Menu menu;
     private Float rating_float;
-    private Integer beginyear, endyear, minVotes, limitOfTries;
+    private Integer beginyear, endyear, minVotes, limitOfTries, generateTries;
     private DisplayMovieActivity displayMovieActivity;
 
     public MovieGeneratorDisplay(Context context, Menu menu, DisplayMovieActivity displayMovieActivity) {
@@ -53,6 +53,7 @@ public class MovieGeneratorDisplay {
 
     public void generate(){
         fetchMovie = Toast.makeText(context, "Fetching movie...", Toast.LENGTH_SHORT);
+        generateTries = 0;
         fetchMovie.show();
         calculateLimit();
     }
@@ -143,7 +144,7 @@ public class MovieGeneratorDisplay {
     }
 
     private void generateMovie() {
-        if(MainActivity.history.size() >= limitOfTries){
+        if(generateTries > limitOfTries){
             Toast.makeText(MainActivity.mContext, "All possible results have been found, change filters (all results are in history)", Toast.LENGTH_SHORT).show();
             displayMovieActivity.finishActivity();
         }
@@ -185,6 +186,9 @@ public class MovieGeneratorDisplay {
                     public void onResponse(JSONObject responseObject) {
                         try {
                             String response = responseObject.getString("Response");
+                            if(response.equals("True") && historyContainsId(current_movie_id)){
+                                generateTries++;
+                            }
                             if(response.equals("True") && !(historyContainsId(current_movie_id))){
                                 MainActivity.history.add(current_movie_id);
                                 jsonString = responseObject.toString();
