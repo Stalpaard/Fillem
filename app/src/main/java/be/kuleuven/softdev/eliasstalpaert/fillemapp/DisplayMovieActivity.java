@@ -214,8 +214,6 @@ public class DisplayMovieActivity extends AppCompatActivity {
             public void onGenerated(Palette palette) {
                 int detailsColor = palette.getDominantColor(6723232);
                 int backgroundConstraint = palette.getLightVibrantColor(6723232);
-                //releaseyear_textview.setTextColor(detailsColor);
-                //title_textview.setTextColor(detailsColor);
                 constraintLayout.setBackgroundColor(backgroundConstraint);
                 detailsLayout.setBackgroundColor(detailsColor);
             }
@@ -231,12 +229,7 @@ public class DisplayMovieActivity extends AppCompatActivity {
 
     public boolean isInWatchlist(){
         MainActivity.loadWatchList(this);
-        if(MainActivity.watchString.contains(this.imdbId)){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return MainActivity.watchString.contains(this.imdbId);
     }
 
     public void reEnableInput(){
