@@ -36,17 +36,19 @@ public class MovieGenerator {
     private JSONObject movie;
     private String current_movie_id, jsonString;
     private Toast fetchMovie;
+    private Boolean enabled;
     private RequestQueue requestQueue;
     private Map<String,MenuItem> genres;
     private Menu menu;
     private Float rating_float;
-    private Integer beginyear, endyear, minVotes, limitOfTries, generateTries;
+    private Integer beginyear, endyear, minVotes, limitOfTries, generateTries, overallTries;
     private MainActivity mainActivity;
 
 
     public MovieGenerator(Context context, Menu menu, MainActivity mainActivity) {
         this.context = context;
         this.menu = menu;
+        this.enabled = true;
         this.localHistory = new TreeSet<>();
         this.mainActivity = mainActivity;
 
@@ -58,6 +60,7 @@ public class MovieGenerator {
 
     public void generate(){
         generateTries = 0;
+        overallTries = 0;
         fetchMovie = Toast.makeText(context, "Fetching movie...", Toast.LENGTH_SHORT);
         fetchMovie.show();
         calculateLimit();
@@ -194,11 +197,24 @@ public class MovieGenerator {
         }
     }
 
+    private boolean isEnabled(){
+        return this.enabled;
+    }
+
+    public void setEnabled(boolean enabled){
+        this.enabled = enabled;
+    }
+
     private void reEnableInput(){
         mainActivity.setInputEnabled(true);
     }
 
     private void checkResponse() {
+        overallTries++;
+        if(overallTries > 10){
+            Toast.makeText(context, "Still searching...", Toast.LENGTH_SHORT).show();
+            overallTries = 0;
+        }
         String queryUrl = "http://www.omdbapi.com/?i=" + current_movie_id + "&apikey=e2383f7f";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, queryUrl, null, new Response.Listener<JSONObject>() {
@@ -219,7 +235,9 @@ public class MovieGenerator {
                                 startDisplayActivity();
                             }
                             else{
-                                generateMovie();
+                                if(isEnabled()){
+                                    generateMovie();
+                                }
                             }
                         } catch (JSONException e) {
                             fetchMovie.cancel();

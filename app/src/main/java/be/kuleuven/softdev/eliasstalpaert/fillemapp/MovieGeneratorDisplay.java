@@ -32,6 +32,7 @@ public class MovieGeneratorDisplay {
     public static final String EXTRA_MINVOTES = "be.kuleuven.softdev.eliasstalpaert.fillemapp.MINVOTES";
 
     private Context context;
+    private Boolean enabled;
     private JSONObject movie;
     private String current_movie_id, jsonString;
     private Toast fetchMovie;
@@ -40,12 +41,13 @@ public class MovieGeneratorDisplay {
     private Set<String> localHistory;
     private Menu menu;
     private Float rating_float;
-    private Integer beginyear, endyear, minVotes, limitOfTries, generateTries;
+    private Integer beginyear, endyear, minVotes, limitOfTries, generateTries, overallTries;
     private DisplayMovieActivity displayMovieActivity;
 
     public MovieGeneratorDisplay(Context context, Menu menu, DisplayMovieActivity displayMovieActivity) {
         this.context = context;
         this.menu = menu;
+        this.enabled = true;
         this.localHistory = new TreeSet<>();
         this.displayMovieActivity = displayMovieActivity;
 
@@ -58,6 +60,7 @@ public class MovieGeneratorDisplay {
     public void generate(){
         fetchMovie = Toast.makeText(context, "Fetching movie...", Toast.LENGTH_SHORT);
         generateTries = 0;
+        overallTries = 0;
         fetchMovie.show();
         calculateLimit();
     }
@@ -190,6 +193,11 @@ public class MovieGeneratorDisplay {
     }
 
     private void checkResponse() {
+        overallTries++;
+        if(overallTries > 10){
+            Toast.makeText(context, "Still searching...", Toast.LENGTH_SHORT).show();
+            overallTries = 0;
+        }
         String queryUrl = "http://www.omdbapi.com/?i=" + current_movie_id + "&apikey=e2383f7f";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, queryUrl, null, new Response.Listener<JSONObject>() {
@@ -211,7 +219,9 @@ public class MovieGeneratorDisplay {
                                 displayMovieActivity.finishActivity();
                             }
                             else{
-                                generateMovie();
+                                if(isEnabled()){
+                                    generateMovie();
+                                }
                             }
                         } catch (JSONException e) {
                             fetchMovie.cancel();
@@ -226,6 +236,14 @@ public class MovieGeneratorDisplay {
                     }
                 });
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private boolean isEnabled(){
+        return this.enabled;
+    }
+
+    public void setEnabled(boolean enabled){
+        this.enabled = enabled;
     }
 
     private boolean localHistoryContainsId(String imdbId){

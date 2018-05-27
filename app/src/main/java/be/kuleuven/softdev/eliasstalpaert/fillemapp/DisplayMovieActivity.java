@@ -62,6 +62,7 @@ public class DisplayMovieActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        movieGenerator.setEnabled(false);
         movieGenerator = null;
     }
 
