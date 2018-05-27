@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 public class HistoryMovie {
 
-    private String movieTitle, movieGenre, posterUrl, movieRuntime, movieDirector, movieActors, movieImdbId;
+    private String movieTitle, movieGenre, posterUrl, movieRuntime, movieDirector, movieActors, movieImdbId, imdbRating, imdbVotes;
     private String movieReleaseYear;
     private String jsonString;
 
@@ -21,12 +21,22 @@ public class HistoryMovie {
             this.movieActors = movieJson.getString("Actors");
             this.movieImdbId = movieJson.getString("imdbID");
             this.posterUrl = movieJson.getString("Poster");
+            this.imdbRating = movieJson.getString("imdbRating");
+            this.imdbVotes = movieJson.getString("imdbVotes");
         }
         catch(JSONException e){}
     }
 
     public String getJsonString() {
         return jsonString;
+    }
+
+    public String getImdbRating() {
+        return imdbRating;
+    }
+
+    public String getImdbVotes() {
+        return imdbVotes;
     }
 
     public String getMovieImdbId() {

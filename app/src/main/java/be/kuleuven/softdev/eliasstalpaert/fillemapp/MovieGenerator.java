@@ -35,7 +35,7 @@ public class MovieGenerator {
     private Set<String> localHistory;
     private JSONObject movie;
     private String current_movie_id, jsonString;
-    private Toast fetchMovie;
+    private Toast fetchMovie, overallTriesToast;
     private Boolean enabled;
     private RequestQueue requestQueue;
     private Map<String,MenuItem> genres;
@@ -54,6 +54,7 @@ public class MovieGenerator {
 
         genres = new TreeMap<>();
         requestQueue = Volley.newRequestQueue(context);
+        overallTriesToast = Toast.makeText(MainActivity.mContext, "Still searching...", Toast.LENGTH_SHORT);
 
         initGenres();
     }
@@ -179,7 +180,7 @@ public class MovieGenerator {
                                 checkResponse();
                             }
                             catch(JSONException e) {
-                                fetchMovie.cancel();
+                                cancelToasts();
                                 Toast.makeText(context, "No movies found", Toast.LENGTH_SHORT).show();
                                 reEnableInput();
                             }
@@ -188,7 +189,7 @@ public class MovieGenerator {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            fetchMovie.cancel();
+                            cancelToasts();
                             Toast.makeText(context, "Unable to fetch data: please check your internet connection", Toast.LENGTH_SHORT).show();
                             reEnableInput();
                         }
@@ -211,47 +212,59 @@ public class MovieGenerator {
 
     private void checkResponse() {
         overallTries++;
-        if(overallTries > 10){
-            Toast.makeText(context, "Still searching...", Toast.LENGTH_SHORT).show();
-            overallTries = 0;
+        if(overallTries % 5 == 0 && overallTries < 20){
+            overallTriesToast.show();
         }
-        String queryUrl = "http://www.omdbapi.com/?i=" + current_movie_id + "&apikey=e2383f7f";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, queryUrl, null, new Response.Listener<JSONObject>() {
+        if(overallTries > 20 || !(isEnabled())){
+            cancelToasts();
+            if(overallTries > 20){
+                Toast.makeText(MainActivity.mContext, "Server Time-Out", Toast.LENGTH_SHORT).show();
+            }
+            overallTries = 0;
+            reEnableInput();
+        }
+        else {
+            String queryUrl = "http://www.omdbapi.com/?i=" + current_movie_id + "&apikey=e2383f7f";
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, queryUrl, null, new Response.Listener<JSONObject>() {
 
-                    @Override
-                    public void onResponse(JSONObject responseObject) {
-                        try {
-                            String response = responseObject.getString("Response");
-                            if(response.equals("True") && historyContainsId(current_movie_id) && !(localHistoryContainsId(current_movie_id))){
-                                localHistory.add(current_movie_id);
-                                generateTries++;
-                            }
-                            if(response.equals("True") && !(historyContainsId(current_movie_id))){
-                                MainActivity.history.add(current_movie_id);
-                                jsonString = responseObject.toString();
-                                MainActivity.historyMoviesList.add(new HistoryMovie(jsonString));
-                                fetchMovie.cancel();
-                                startDisplayActivity();
-                            }
-                            else{
-                                if(isEnabled()){
-                                    generateMovie();
+                        @Override
+                        public void onResponse(JSONObject responseObject) {
+                            try {
+                                String response = responseObject.getString("Response");
+                                if (response.equals("True") && historyContainsId(current_movie_id) && !(localHistoryContainsId(current_movie_id))) {
+                                    localHistory.add(current_movie_id);
+                                    generateTries++;
                                 }
+                                if (response.equals("True") && !(historyContainsId(current_movie_id))) {
+                                    MainActivity.history.add(current_movie_id);
+                                    jsonString = responseObject.toString();
+                                    MainActivity.historyMoviesList.add(new HistoryMovie(jsonString));
+                                    cancelToasts();
+                                    startDisplayActivity();
+                                } else {
+                                    if (isEnabled()) {
+                                        generateMovie();
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                cancelToasts();
+                                Toast.makeText(context, "Error finding details", Toast.LENGTH_SHORT).show();
                             }
-                        } catch (JSONException e) {
-                            fetchMovie.cancel();
-                            Toast.makeText(context, "Error finding details", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                }, new Response.ErrorListener() {
+                    }, new Response.ErrorListener() {
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        generateMovie();
-                    }
-                });
-        requestQueue.add(jsonObjectRequest);
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            generateMovie();
+                        }
+                    });
+            requestQueue.add(jsonObjectRequest);
+        }
+    }
+
+    private void cancelToasts(){
+        fetchMovie.cancel();
     }
 
     private boolean historyContainsId(String imdbId){

@@ -2,12 +2,15 @@ package be.kuleuven.softdev.eliasstalpaert.fillemapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,9 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
     private RatingBar ratingBar;
     private DrawerLayout mDrawerLayout;
+    private ConstraintLayout mConstraintLayout;
     private NavigationView mNavigationView;
+    private CardView helpScreen;
     private TextView textView_rating, textView_beginyear, textView_endyear, textView_minVotes;
-    private Button button_movie, historyButton;
+    private Button button_movie, historyButton, helpMainButton, helpMainCloseButton, closeGenresButton;
     private RangeBar rangeBarYear;
     private SeekBar seekbarVotes;
     private MovieGenerator movieGenerator;
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.findViews();
+        this.setOnClickListeners();
 
         history = new ArrayList<>();
         historyMoviesList = new LinkedList<>();
@@ -72,9 +78,10 @@ public class MainActivity extends AppCompatActivity {
         this.setTitle("Genres");
 
         this.initActionBar();
+        this.initHeaderClick();
         this.initFilters();
         this.initMovieGen();
-        this.setOnClickListeners();
+
     }
 
     @Override
@@ -100,6 +107,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startHistoryActivity();
+            }
+        });
+
+        helpMainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helpScreen.setVisibility(View.VISIBLE);
+            }
+        });
+
+        helpMainCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helpScreen.setVisibility(View.GONE);
             }
         });
 
@@ -169,6 +190,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void findViews(){
         historyButton = findViewById(R.id.historyButton);
+        mConstraintLayout = findViewById(R.id.constraintLayoutMain);
+        closeGenresButton = findViewById(R.id.closeGenres);
+        helpScreen = findViewById(R.id.helpMainCardView);
+        helpMainButton = findViewById(R.id.helpMainButton);
+        helpMainCloseButton = findViewById(R.id.helpCloseMainButton);
         button_movie = findViewById(R.id.button_movie);
         rangeBarYear = findViewById(R.id.rangebarYear);
         seekbarVotes = findViewById(R.id.seekbarVotes);
@@ -179,6 +205,16 @@ public class MainActivity extends AppCompatActivity {
         textView_beginyear = findViewById(R.id.textView_beginyear);
         textView_endyear = findViewById(R.id.textView_endyear);
         textView_minVotes = findViewById(R.id.textView_minVotes);
+    }
+
+    private void initHeaderClick(){
+        View header_view = mNavigationView.getHeaderView(0);
+        header_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
     }
 
     private void initActionBar() throws NullPointerException{

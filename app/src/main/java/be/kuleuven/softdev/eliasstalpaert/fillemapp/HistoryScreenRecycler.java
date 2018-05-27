@@ -3,6 +3,7 @@ package be.kuleuven.softdev.eliasstalpaert.fillemapp;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -22,8 +23,8 @@ public class HistoryScreenRecycler extends AppCompatActivity {
     private RecyclerView recyclerView;
     private HistoryMovieAdapter adapter;
     private TextView empty;
-    private Button clear, exitHistoryButton;
-
+    private Button clear, exitHistoryButton, helpHistoryButton, exitHelpHistoryButton;
+    private CardView helpScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +65,26 @@ public class HistoryScreenRecycler extends AppCompatActivity {
         empty = findViewById(R.id.emptyHistory);
         clear = findViewById(R.id.clearHistoryRecycler);
         exitHistoryButton = findViewById(R.id.exitHistoryButton);
+        helpScreen = findViewById(R.id.helpScreenHistory);
+        helpHistoryButton = findViewById(R.id.helpHistoryButton);
+        exitHelpHistoryButton = findViewById(R.id.closeHelpHistory);
     }
 
     private void setOnClickListeners(){
+        helpHistoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helpScreen.setVisibility(View.VISIBLE);
+            }
+        });
+
+        exitHelpHistoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helpScreen.setVisibility(View.GONE);
+            }
+        });
+
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

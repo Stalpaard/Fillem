@@ -24,12 +24,12 @@ import org.json.JSONObject;
 public class DisplayMovieActivity extends AppCompatActivity {
 
     private RequestQueue requestQueue;
-    private TextView title_textview, releaseyear_textview, plot_textview, genre_textview, director_textview, actor_textview, runtime_textview;
+    private TextView title_textview, releaseyear_textview, plot_textview, genre_textview, director_textview, actor_textview, runtime_textview, rating_textview, votes_textview;
     private Context context = this;
     private ConstraintLayout constraintLayout;
     private LinearLayout detailsLayout;
 
-    private String movie_title, movie_year, movie_runtime, movie_genre, movie_director, movie_actors, movie_plot, imdbId, posterUrl;;
+    private String movie_title, movie_year, movie_runtime, movie_genre, movie_director, movie_actors, movie_plot, imdbId, posterUrl, imdbRating, imdhVotes;
 
     private Boolean no_generate;
 
@@ -57,13 +57,6 @@ public class DisplayMovieActivity extends AppCompatActivity {
         updateMovieDetails();
 
         postInit();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        movieGenerator.setEnabled(false);
-        movieGenerator = null;
     }
 
     private void initIntentExtras(){
@@ -107,7 +100,9 @@ public class DisplayMovieActivity extends AppCompatActivity {
         title_textview = findViewById(R.id.textView_title);
         releaseyear_textview = findViewById(R.id.textView_displayReleaseYear);
         plot_textview = findViewById(R.id.textViewPlot);
+        rating_textview = findViewById(R.id.ratingDisplay_textview);
         genre_textview = findViewById(R.id.textViewGenre);
+        votes_textview = findViewById(R.id.votesDisplay_textView);
         director_textview = findViewById(R.id.textViewDirector);
         actor_textview = findViewById(R.id.textViewActor);
         runtime_textview = findViewById(R.id.runTime_textView);
@@ -152,6 +147,8 @@ public class DisplayMovieActivity extends AppCompatActivity {
              movie_director = movieJson.getString("Director");
              movie_actors = movieJson.getString("Actors");
              imdbId = movieJson.getString("imdbID");
+             imdbRating = movieJson.getString("imdbRating");
+             imdhVotes = movieJson.getString("imdbVotes");
              posterUrl = movieJson.getString("Poster");
          }
          catch (JSONException e){
@@ -167,6 +164,8 @@ public class DisplayMovieActivity extends AppCompatActivity {
         releaseyear_textview.setText(movie_year);
         plot_textview.setText(movie_plot);
         genre_textview.setText(movie_genre);
+        rating_textview.setText(imdbRating + "/10");
+        votes_textview.setText("("+imdhVotes+")");
     }
 
     private void postInit() {
@@ -192,6 +191,8 @@ public class DisplayMovieActivity extends AppCompatActivity {
     }
 
     public void finishActivity(){
+        movieGenerator.setEnabled(false);
+        movieGenerator = null;
         this.finish();
     }
 }

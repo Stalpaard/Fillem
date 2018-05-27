@@ -11,7 +11,64 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <android.support.v7.widget.CardView
+            android:id="@+id/helpMainCardView"
+            android:layout_width="319dp"
+            android:layout_height="243dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="123dp"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="279dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="21dp"
+                    android:text="Min. votes: amount of user votes used for determining the rating"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="279dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/helpCloseMainButton"
+                    android:layout_centerHorizontal="true"
+                    android:text="Genres: choose all genres which you would like (open by swiping from left to right or clicking the button left to the 'Genres'-title)"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignTop="@+id/helpCloseMainButton"
+                    android:layout_marginStart="24dp"
+                    android:text="Help"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/helpCloseMainButton"
+                    android:layout_width="43dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="11dp"
+                    android:layout_marginTop="13dp"
+                    android:text="X" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayoutMain"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -164,6 +221,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.323" />
+
+            <Button
+                android:id="@+id/helpMainButton"
+                android:layout_width="43dp"
+                android:layout_height="45dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="?"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/button_movie"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.975"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.167" />
 
             <TextView
                 android:id="@+id/textView_minVotes"
