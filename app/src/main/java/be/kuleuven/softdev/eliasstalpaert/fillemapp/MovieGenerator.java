@@ -135,7 +135,13 @@ public class MovieGenerator {
                             JSONObject countArray = jsonArray.getJSONObject(0);
                             String countString = countArray.getString("count");
                             limitOfTries = Integer.parseInt(countString);
-                            generateMovie();
+                            if(limitOfTries > 0){
+                                generateMovie();
+                            }
+                            else{
+                                Toast.makeText(context, "No movies found", Toast.LENGTH_SHORT).show();
+                                reEnableInput();
+                            }
                         }
                         catch(JSONException e) {
                             Toast.makeText(context, "Couldn't calculate limit of tries, try again or restart", Toast.LENGTH_SHORT).show();
@@ -201,7 +207,7 @@ public class MovieGenerator {
                     public void onResponse(JSONObject responseObject) {
                         try {
                             String response = responseObject.getString("Response");
-                            if(response.equals("True") && historyContainsId(current_movie_id) && !(localHistory.contains(current_movie_id))){
+                            if(response.equals("True") && historyContainsId(current_movie_id) && !(localHistoryContainsId(current_movie_id))){
                                 localHistory.add(current_movie_id);
                                 generateTries++;
                             }

@@ -59,6 +59,12 @@ public class DisplayMovieActivity extends AppCompatActivity {
         postInit();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        movieGenerator = null;
+    }
+
     private void initIntentExtras(){
         beginyear = getIntent().getIntExtra(MovieGenerator.EXTRA_BEGINYEAR, 0);
         endyear = getIntent().getIntExtra(MovieGenerator.EXTRA_ENDYEAR, 3000);

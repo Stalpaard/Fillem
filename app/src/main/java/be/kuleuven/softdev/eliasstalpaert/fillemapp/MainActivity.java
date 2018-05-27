@@ -52,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        movieGenerator = null;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -201,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         rating_float = 0f;
         textView_beginyear.setText(beginyear.toString());
         textView_endyear.setText(endyear.toString());
-        textView_rating.setText("Rating");
+        textView_rating.setText("Minimum Rating");
         textView_minVotes.setText(minVotes.toString());
         rangeBarYear.setTickCount(127);
         rangeBarYear.setThumbRadius(10);

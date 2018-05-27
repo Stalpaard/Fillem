@@ -131,7 +131,13 @@ public class MovieGeneratorDisplay {
                             JSONObject countArray = jsonArray.getJSONObject(0);
                             String countString = countArray.getString("count");
                             limitOfTries = Integer.parseInt(countString);
-                            generateMovie();
+                            if(limitOfTries > 0){
+                                generateMovie();
+                            }
+                            else{
+                                Toast.makeText(MainActivity.mContext, "No movies found", Toast.LENGTH_SHORT).show();
+                                displayMovieActivity.finishActivity();
+                            }
                         }
                         catch(JSONException e) {
                             Toast.makeText(context, "Couldn't calculate limit of tries, try again or restart", Toast.LENGTH_SHORT);
@@ -192,7 +198,7 @@ public class MovieGeneratorDisplay {
                     public void onResponse(JSONObject responseObject) {
                         try {
                             String response = responseObject.getString("Response");
-                            if(response.equals("True") && historyContainsId(current_movie_id) && !(localHistory.contains(current_movie_id))){
+                            if(response.equals("True") && historyContainsId(current_movie_id) && !(localHistoryContainsId(current_movie_id))){
                                 localHistory.add(current_movie_id);
                                 generateTries++;
                             }
@@ -220,6 +226,11 @@ public class MovieGeneratorDisplay {
                     }
                 });
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private boolean localHistoryContainsId(String imdbId){
+        if(localHistory.contains(imdbId)) return true;
+        else return false;
     }
 
     private boolean historyContainsId(String imdbId){
