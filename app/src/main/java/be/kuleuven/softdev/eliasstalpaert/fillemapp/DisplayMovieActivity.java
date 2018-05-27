@@ -36,7 +36,7 @@ public class DisplayMovieActivity extends AppCompatActivity {
     private Integer beginyear, endyear, minVotes;
     private Float rating_float;
 
-    private Button generateAgain, trailerPlayButton, exitDisplayButton;
+    private Button generateAgain, trailerPlayButton, exitDisplayButton, cancelDisplayButton;
     private ImageView imageView_internet;
     private MovieGeneratorDisplay movieGenerator;
     private TrailerGenerator trailerGenerator;
@@ -77,6 +77,15 @@ public class DisplayMovieActivity extends AppCompatActivity {
                 movieGenerator.setEndyear(endyear);
                 movieGenerator.setBeginyear(beginyear);
                 movieGenerator.generate();
+                cancelDisplayButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        cancelDisplayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelDisplayButton.setEnabled(false);
+                movieGenerator.setEnabled(false);
             }
         });
 
@@ -102,6 +111,7 @@ public class DisplayMovieActivity extends AppCompatActivity {
         plot_textview = findViewById(R.id.textViewPlot);
         rating_textview = findViewById(R.id.ratingDisplay_textview);
         genre_textview = findViewById(R.id.textViewGenre);
+        cancelDisplayButton = findViewById(R.id.cancelDisplayButton);
         votes_textview = findViewById(R.id.votesDisplay_textView);
         director_textview = findViewById(R.id.textViewDirector);
         actor_textview = findViewById(R.id.textViewActor);
@@ -188,6 +198,12 @@ public class DisplayMovieActivity extends AppCompatActivity {
                 detailsLayout.setBackgroundColor(textColor);
             }
         });
+    }
+
+    public void reEnableInput(){
+        cancelDisplayButton.setVisibility(View.GONE);
+        cancelDisplayButton.setEnabled(true);
+        generateAgain.setEnabled(true);
     }
 
     public void finishActivity(){

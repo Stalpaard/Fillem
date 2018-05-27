@@ -17,6 +17,16 @@
         android:textAlignment="center"
         android:textSize="20sp" />
 
+    <Button
+        android:id="@+id/cancelDisplayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="78dp"
+        android:layout_toStartOf="@+id/exitDisplayButton"
+        android:text="Cancel"
+        android:visibility="gone" />
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraint"
         android:layout_width="match_parent"

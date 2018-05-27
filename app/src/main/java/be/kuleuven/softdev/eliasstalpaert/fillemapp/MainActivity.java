@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView mNavigationView;
     private CardView helpScreen;
     private TextView textView_rating, textView_beginyear, textView_endyear, textView_minVotes;
-    private Button button_movie, historyButton, helpMainButton, helpMainCloseButton, closeGenresButton;
+    private Button button_movie, historyButton, helpMainButton, helpMainCloseButton, closeGenresButton, cancelMainButton;
     private RangeBar rangeBarYear;
     private SeekBar seekbarVotes;
     private MovieGenerator movieGenerator;
@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setInputEnabled(false);
                 movieGenerator.generate();
+                cancelMainButton.setVisibility(View.VISIBLE);
             }
         });
 
@@ -114,6 +115,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 helpScreen.setVisibility(View.VISIBLE);
+            }
+        });
+
+        cancelMainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelMainButton.setEnabled(false);
+                movieGenerator.setEnabled(false);
             }
         });
 
@@ -192,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
         historyButton = findViewById(R.id.historyButton);
         mConstraintLayout = findViewById(R.id.constraintLayoutMain);
         closeGenresButton = findViewById(R.id.closeGenres);
+        cancelMainButton = findViewById(R.id.cancelMainButton);
         helpScreen = findViewById(R.id.helpMainCardView);
         helpMainButton = findViewById(R.id.helpMainButton);
         helpMainCloseButton = findViewById(R.id.helpCloseMainButton);
@@ -249,6 +259,11 @@ public class MainActivity extends AppCompatActivity {
         rangeBarYear.setTickCount(127);
         rangeBarYear.setThumbRadius(10);
         seekbarVotes.setProgress(50);
+    }
+
+    public void hideCancel(){
+        cancelMainButton.setEnabled(true);
+        cancelMainButton.setVisibility(View.GONE);
     }
 
     public void setInputEnabled(boolean state){

@@ -204,7 +204,8 @@ public class MovieGeneratorDisplay {
                 Toast.makeText(MainActivity.mContext, "Server Time-Out", Toast.LENGTH_SHORT).show();
             }
             overallTries = 0;
-            displayMovieActivity.finishActivity();
+            setEnabled(true);
+            displayMovieActivity.reEnableInput();
         }
         else {
             String queryUrl = "http://www.omdbapi.com/?i=" + current_movie_id + "&apikey=e2383f7f";

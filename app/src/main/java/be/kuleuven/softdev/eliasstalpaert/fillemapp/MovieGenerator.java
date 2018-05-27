@@ -198,16 +198,16 @@ public class MovieGenerator {
         }
     }
 
+    private void reEnableInput(){
+        mainActivity.setInputEnabled(true);
+    }
+
     private boolean isEnabled(){
         return this.enabled;
     }
 
     public void setEnabled(boolean enabled){
         this.enabled = enabled;
-    }
-
-    private void reEnableInput(){
-        mainActivity.setInputEnabled(true);
     }
 
     private void checkResponse() {
@@ -220,7 +220,9 @@ public class MovieGenerator {
             if(overallTries > 20){
                 Toast.makeText(MainActivity.mContext, "Server Time-Out", Toast.LENGTH_SHORT).show();
             }
+            setEnabled(true);
             overallTries = 0;
+            mainActivity.hideCancel();
             reEnableInput();
         }
         else {
