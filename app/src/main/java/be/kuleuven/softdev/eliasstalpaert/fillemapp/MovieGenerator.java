@@ -142,10 +142,13 @@ public class MovieGenerator {
                                 mainActivity.hideCancel();
                                 Toast.makeText(context, "No movies found", Toast.LENGTH_SHORT).show();
                                 reEnableInput();
+                                mainActivity.hideCancel();
                             }
                         }
                         catch(JSONException e) {
                             Toast.makeText(context, "Couldn't calculate limit of tries, try again or restart", Toast.LENGTH_SHORT).show();
+                            reEnableInput();
+                            mainActivity.hideCancel();
                         }
                     }
                 },
@@ -154,6 +157,7 @@ public class MovieGenerator {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(context, "Unable to fetch data: please check your internet connection", Toast.LENGTH_SHORT).show();
                         reEnableInput();
+                        mainActivity.hideCancel();
                     }
                 });
         requestQueue.add(request);
@@ -180,6 +184,7 @@ public class MovieGenerator {
                                 cancelToasts();
                                 Toast.makeText(context, "No movies found", Toast.LENGTH_SHORT).show();
                                 reEnableInput();
+                                mainActivity.hideCancel();
                             }
                         }
                     },
@@ -189,6 +194,7 @@ public class MovieGenerator {
                             cancelToasts();
                             Toast.makeText(context, "Unable to fetch data: please check your internet connection", Toast.LENGTH_SHORT).show();
                             reEnableInput();
+                            mainActivity.hideCancel();
                         }
                     });
             requestQueue.add(request);
@@ -238,6 +244,8 @@ public class MovieGenerator {
                             } catch (JSONException e) {
                                 cancelToasts();
                                 Toast.makeText(context, "Error finding details", Toast.LENGTH_SHORT).show();
+                                reEnableInput();
+                                mainActivity.hideCancel();
                             }
                         }
                     }, new Response.ErrorListener() {
