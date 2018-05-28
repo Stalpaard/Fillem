@@ -151,8 +151,8 @@ public class DisplayMovieActivity extends AppCompatActivity {
                 .load(posterUrl)
                 .fit()
                 .centerInside()
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher_round)
+                .placeholder(R.drawable.loading_image)
+                .error(R.drawable.error)
                 .into(imageView_internet, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess(){
